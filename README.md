@@ -1,6 +1,9 @@
 # Console Editor
 Console Demo which uses a tablet and SAR to populate a control panel with objects. 
 
+## IMPORTANT
+Requires Blender and Unity 2017.4.2f1 to open the project in the editor.
+
 ## Setup
 
 ### Calibrating the Projectors
