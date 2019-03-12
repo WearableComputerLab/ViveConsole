@@ -28,7 +28,7 @@ Console will only appear to be correctly calibrated in full screen if IntMat.dat
 
 Example images of the SAR project
 
-![](Images/Console.png)
+![](Images/Console.jpg)
 
 Console Demo.
 - Uses vive lighthouses to track the console and a pen for selecting items
