@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+	<topictype value="HEADER" />
+	<title>=Model Class</title>
+	<link rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+</head>
+<body>
+<div class="banner">
+  <div>
+	<span class="projectname">aiImporter Runtime</span>
+ </div>
+ <div class="topicname">
+	<img src="bmp/HEADER.gif">&nbsp;Model Class
+ </div>
+</div>
+
+<div style="margin-left:10pt;margin-right=10pt">
+</br><p>Represents a single model</p></br>
+<table class="detailtable" width="80%"><tr>     <th align="left" >Member</th>  <th align="left" >Description</th></tr><tr>  <td><font color="blue">string</font> Name</td>  <td>Name of the model node.</td></tr><tr>
+  <td><font color="blue">Vector3C</font> position</td>
+  <td>Position vector of the model. <b>*</b></td>
+</tr>
+<tr>
+  <td><font color="blue">QuaternionC</font> rotation</td>
+  <td>Rotation values of the model in Quaternion format.(X, Y, Z ,W)<b>*</b></td>
+</tr>
+<tr>
+  <td><font color="blue">Vector3C</font> scale</td>
+  <td>Scale vector of the model. <b>*</b></td>
+</tr><tr>  <td>List<<a href="Geometry.htm">Geometry</a>> geometry</td>
+  <td>List containing the geometry data of the model. (Meshes)</td></tr></table><p><br>
+<br>
+<table border="0" cellpadding="3" width="99%">
+</table>
+
+<p><b>*</b> Vector3C and QuaternionC are serializable versions of Vector3 and Quaternion classes of Unity. Cast between these types are possible./p>
+
+</div><hr />
+<small>&nbsp;&nbsp;Last Updated: 04/08/15 | 
+&copy Burak Akdere 2015</small>
+<br clear="all" />
+<br/>
+</body>
+</html>

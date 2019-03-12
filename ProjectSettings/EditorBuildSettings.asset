@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/console-demo.unity
+    guid: 3f758bd6830063c47b906a944c39a001
+  - enabled: 0
+    path: Assets/tablet-console.unity
+    guid: 44cc5cb5e69f26245ba49f923b6053fa
+  - enabled: 0
+    path: 
+    guid: 498435d6527fce54883127ad6fe054f4
+  - enabled: 0
+    path: 
+    guid: c3c0be9ea91842b4ba512cd0a7f57a4a
+  - enabled: 0
+    path: 
+    guid: 2b762475777f3d54c8ba1d3eae5a9b03
+  - enabled: 0
+    path: 
+    guid: 75a39b6a060360d45b9a689789aa0eda
+  - enabled: 0
+    path: 
+    guid: 6a8a08d896ba5ca4a824a039b8f6c19a
+  - enabled: 0
+    path: Assets/calibration_test.unity
+    guid: 942ae1a935734014f93c73b73db77906

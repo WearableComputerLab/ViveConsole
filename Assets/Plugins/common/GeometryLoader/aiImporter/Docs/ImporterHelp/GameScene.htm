@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+	<topictype value="HEADER" />
+	<title>GameScene Class</title>
+	<link rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+</head>
+<body>
+<div class="banner">
+  <div>
+	<span class="projectname">aiImporter Runtime</span>
+ </div>
+ <div class="topicname">
+	<img src="bmp/HEADER.gif">&nbsp;GameScene Class
+ </div>
+</div>
+
+<div style="margin-left:10pt;margin-right=10pt">
+</br><p>Represents a completely imported model or scene. Every data that aiImporter has collected so far can be accesed here. This is the scene that we pass to Unity to create a model at runtime.</p></br>
+
+</br><p>This class consists mostly of Lists. We will use a for/for each loop in Unity to access the items of these lists.</p></br><table class="detailtable" width="80%"><tr>     <th align="left" >Member</th>  <th align="left" >Description</th></tr><tr>  <td>List<<a href="Model.htm">Model</a>> models</td>  <td>List containing all of the models that are imported.</td></tr><tr>
+  <td>List<<a href="MaterialData.htm">MaterialData</a>> materials</td>
+  <td>List containing all of the materials that are used in the imported scene.</td>
+</tr><tr>  <td>List<<a href="BoneData.htm">BoneData</a>> bones</td>
+  <td>List containing all of the bones that are used in the imported scene.</td></tr>
+<tr>
+  <td>List<<font color="blue">string</font>> animNames</td>
+  <td>List containing all of the animation names that are used by imported model.</td>
+</tr></table><p><br>
+<br>
+<table border="0" cellpadding="3" width="99%">
+</table>
+
+</div><hr />
+<small>&nbsp;&nbsp;Last Updated: 04/08/15 | 
+&copy Burak Akdere 2015</small>
+<br clear="all" />
+<br/>
+</body>
+</html>

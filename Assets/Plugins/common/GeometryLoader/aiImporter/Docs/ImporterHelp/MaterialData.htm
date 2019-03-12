@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+	<topictype value="HEADER" />
+	<title>=MaterialData Class</title>
+	<link rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+</head>
+<body>
+<div class="banner">
+  <div>
+	<span class="projectname">aiImporter Runtime</span>
+ </div>
+ <div class="topicname">
+	<img src="bmp/HEADER.gif">&nbsp;MaterialData Class
+ </div>
+</div>
+
+<div style="margin-left:10pt;margin-right=10pt">
+</br><p>Represents a single material that contains color and texture information of the mesh.</p></br>
+<table class="detailtable" width="80%"><tr>     <th align="left" >Member</th>  <th align="left" >Description</th></tr><tr>  <td><font color="blue">string</font> MatName</td>  <td>Name of the material.</td></tr>
+<tr>
+  <td><font color="blue">string</font> filename</td>
+  <td>Filename of the material.</td>
+</tr>
+<tr>
+  <td><font color="blue">bool</font> HasTextureDiffuse</td>
+  <td>Checks if the material has a diffuse texture.</td>
+</tr>
+<tr>
+  <td><font color="blue">bool</font> HasTextureNormal</td>
+  <td>Checks if the material has a normal texture.</td>
+</tr>
+<tr>
+  <td><font color="blue">bool</font> HasTransTexture</td>
+  <td>Checks if the material has a transparency texture.</td>
+</tr>
+<tr>
+  <td><font color="blue">bool</font> HasColorDiffuse</td>
+  <td>Checks if the material has a color diffuse property.</td>
+</tr>
+<tr>
+  <td><font color="blue">bool</font> HasColorEmissive</td>
+  <td>Checks if the material has a color emissive property.</td>
+</tr>
+<tr>
+  <td><font color="blue">bool</font> HasColorSpecular</td>
+  <td>Checks if the material has a color specular property. </td>
+</tr>
+<tr>
+  <td><font color="blue">bool</font> HasTransparency</td>
+  <td>Checks if the material has a transparency value.</td>
+</tr>
+<tr>
+  <td><font color="blue">byte</font>[] DiffuseTexture</td>
+  <td>Byte array representation of the diffuse texture.<b>*</b></td>
+</tr>
+<tr>
+  <td><font color="blue">byte</font>[] NormalTexture</td>
+  <td>Byte array representation of the normal texture.<b>*</b></td>
+</tr>
+<tr>
+  <td><font color="blue">Vector4C</font> DiffuseColor</td>
+  <td>Gets the diffuse color.<b>**</b></td>
+</tr>
+<tr>
+  <td><font color="blue">Vector4C</font> SpecularColor</td>
+  <td>Gets the specular color.<b>**</b></td>
+</tr>
+<tr>
+  <td><font color="blue">Vector4C</font> EmissiveColor</td>
+  <td>Gets the emissive color.<b>**</b></td>
+</tr>
+<tr>
+  <td><font color="blue">float</font> AlphaValue</td>
+  <td>Transparency value of the material. Between 0 and 1.</td>
+</tr></table><p><br>
+<br>
+<table border="0" cellpadding="3" width="99%">
+</table>
+
+<p><b>*</b> Byte array will be converted to Texture2D format via Unity scripting.</p>
+<p><b>**</b> Vector4C is the serializable version of Vector4 class of Unity. Cast between these types are possible.</p>
+
+</div><hr />
+<small>&nbsp;&nbsp;Last Updated: 04/08/15 | 
+&copy Burak Akdere 2015</small>
+<br clear="all" />
+<br/>
+</body>
+</html>

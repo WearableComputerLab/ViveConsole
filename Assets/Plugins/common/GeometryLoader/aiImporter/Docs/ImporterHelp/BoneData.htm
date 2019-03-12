@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+	<topictype value="HEADER" />
+	<title>=BoneData Class</title>
+	<link rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+</head>
+<body>
+<div class="banner">
+  <div>
+	<span class="projectname">aiImporter Runtime</span>
+ </div>
+ <div class="topicname">
+	<img src="bmp/HEADER.gif">&nbsp;BoneData Class
+ </div>
+</div>
+
+<div style="margin-left:10pt;margin-right=10pt">
+</br><p>Represents a single bone of a mesh.</p></br>
+<table class="detailtable" width="80%"><tr>     <th align="left" >Member</th>  <th align="left" >Description</th></tr><tr>  <td><font color="blue">string</font> BoneName</td>  <td>Name of the bone. Can be used to find the bone in the hierarchy.</td></tr>
+<tr>
+  <td><font color="blue">string</font> ParentName</td>
+  <td>Name of the parent bone, if there is any.</td>
+</tr><tr>
+  <td><font color="blue">Vector3C</font> position</td>
+  <td>Position vector of the bone. <b>*</b></td>
+</tr>
+<tr>
+  <td><font color="blue">QuaternionC</font> rotation</td>
+  <td>Rotation vector of the bone. <b>*</b></td>
+</tr>
+<tr>
+  <td><font color="blue">Vector3C</font> scale</td>
+  <td>Scale vector of the bone. <b>*</b></td>
+</tr>
+<tr>
+  <td><font color="blue">bool</font> HasParent</td>
+  <td>Checks if the bone has a parent bone.</td>
+</tr>
+<tr>
+  <td>Dictionary<<font color="blue">string</font>,<a href="AnimationData.htm">AnimationData</a>> animations</td>
+  <td>All of the animation data that is related to this bone. Animation datas are stored separately for each animation. Animation name is used as Dictionary key. </td>
+</tr></table><p><br>
+<br>
+<table border="0" cellpadding="3" width="99%">
+</table>
+
+<p><b>*</b> Vector3C and QuaternionC are serializable versions of Vector3 and Quaternion classes of Unity. Cast between these types are possible.</p>
+
+
+</div><hr />
+<small>&nbsp;&nbsp;Last Updated: 04/08/15 | 
+&copy Burak Akdere 2015</small>
+<br clear="all" />
+<br/>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+	<topictype value="TOPIC" />
+	<title>How does it work?</title>
+	<link rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+</head>
+<body>
+<div class="banner">
+  <div>
+	<span class="projectname">aiImporter Runtime</span>
+ </div>
+ <div class="topicname">
+	<img src="bmp/TOPIC.gif">&nbsp;How does it work?
+ </div>
+</div>
+
+<div class="contentpane">
+
+<p>If you take a look at the Importer folder in the Assets/aiImporter directory of your Unity project, you will notice an executable called AssimpImporterFull.exe (AssimpImporterFree.exe for demo).
+I will call that exe aiImporter from now on. We run the aiImporter via Process.Start method using Unity scripting. We give two parameters to Process.Start : output file name and the path of the model we want to load.
+If we give "FileDialog" as the second parameter aiImporter will open up a file browser for us to choose the model file.</p>
+
+<p>aiImporter runs separately from Unity. It will load the selected model from the file browser or from the given path and get datas such as vertices, uvs, normals, skeleton/skinning data and anything necessary. After that it will
+create a file. The name of the file is the first parameter you passed to Process.Start, it is "scene.bin" by default. 
+This scene.bin file is the serialized version of the <a href="GameScene.htm">GameScene</a> class. We will deserialize it and assign it to a variable using Unity scripting. The scene.bin file is 
+deleted after it is assigned to a variable. Then we will use all of the data to create our model in Unity scene.</p><br>
+
+<p>aiImporter just serves the purpose of converting the model to a format that we can read using Unity scripting, so no there is no documentation for it.</p><br>
+
+<p>The process of deserializing the file and creating a procedural mesh is documented in Unity script files. </p>
+</div>
+
+
+</div><hr />
+<small>&nbsp;&nbsp;Last Updated: 06/08/15 | 
+&copy Burak Akdere 2015</small>
+<br clear="all" />
+<br/>
+</body>
+</html>

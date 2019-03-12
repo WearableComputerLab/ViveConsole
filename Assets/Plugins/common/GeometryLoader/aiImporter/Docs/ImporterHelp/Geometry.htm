@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+	<topictype value="HEADER" />
+	<title>=Geometry Class</title>
+	<link rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+</head>
+<body>
+<div class="banner">
+  <div>
+	<span class="projectname">aiImporter Runtime</span>
+ </div>
+ <div class="topicname">
+	<img src="bmp/HEADER.gif">&nbsp;Geometry Class
+ </div>
+</div>
+
+<div style="margin-left:10pt;margin-right=10pt">
+</br><p>Represents geometry of a model with a single material. (Mesh data)</p></br>
+<table class="detailtable" width="80%"><tr>     <th align="left" >Member</th>  <th align="left" >Description</th></tr><tr>  <td><font color="blue">string</font> Name</td>  <td>Name of the mesh.</td></tr>
+<tr>
+  <td><font color="blue">int</font> MeshIndex</td>
+  <td>Used by aiImporter to identify the Geometry class.</td>
+</tr><tr>
+  <td>List<<font color="blue">Vector3C</font>> vertices</td>
+  <td>List of vertex position vectors. <b>*</b></td>
+</tr>
+<tr>
+  <td>List<<font color="blue">Vector4C</font>> vertexColors</td>
+  <td>List of color values for each vertex. <b>*</b></td>
+</tr>
+<tr>
+  <td>List<<font color="blue">Vector3C</font>> normals</td>
+  <td>List of vertex normals. <b>*</b></td>
+</tr>
+<tr>
+  <td>List<<font color="blue">Vector2C</font>> uvs</td>
+  <td>List of uv positions. <b>*</b></td>
+</tr>
+<tr>
+  <td><font color="blue">int</font>[] triangles</td>
+  <td>An array containing all triangles in the mesh.</td>
+</tr><tr>  <td><font color="blue">int</font> MaterialIndex</td>
+  <td>Index of the material that is used by this mesh.</td></tr>
+<tr>
+  <td>List<<font color="blue">WeightDataList</font>>weights</td>
+  <td>The bone weights of each vertex.</td>
+</tr>
+<tr>
+  <td>List<<a href="BoneData.htm">BoneData</a>> bones</td>
+  <td>List of bones that are affecting this mesh.</td>
+</tr></table><p><br>
+<br>
+<table border="0" cellpadding="3" width="99%">
+</table>
+
+<p><b>*</b> VectorXC and QuaternionC are serializable versions of VectorX and Quaternion classes of Unity. Cast between these types are possible./p>
+
+</div><hr />
+<small>&nbsp;&nbsp;Last Updated: 04/08/15 | 
+&copy Burak Akdere 2015</small>
+<br clear="all" />
+<br/>
+</body>
+</html>

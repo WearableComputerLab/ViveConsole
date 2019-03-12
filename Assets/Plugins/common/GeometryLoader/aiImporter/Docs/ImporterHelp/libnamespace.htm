@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+	<topictype value="HEADER" />
+	<title>DataLib Namespace</title>
+	<link rel="stylesheet" type="text/css" href="templates/wwhelp.css">
+</head>
+<body>
+<div class="banner">
+  <div>
+	<span class="projectname">aiImporter Runtime</span>
+ </div>
+ <div class="topicname">
+	<img src="bmp/HEADER.gif">&nbsp;DataLib Namespace
+ </div>
+</div>
+
+<div style="margin-left:10pt;margin-right=10pt">
+</br><p>The DataLib library consists of 6 classes that hold the necessary model data. Eventhough the purpose of the aiImporter is to import a single skinned model, it can import multiple models
+if they are not skinned. That is why there is a <a href="GameScene.htm">GameScene</a> class that contains a list of multiple models. Another purpose of having a Scene class is to create a similar structure to Assimp Library.</p></br><table class="detailtable" width="80%"><tr>     <th align="left" >Class Name</th>  <th align="left" >Description</th></tr><tr>  <td><a href="GameScene.htm" >GameScene</a></td>  <td>Represents a completely imported model or scene. Every data that aiImporter has collected so far can be accesed here. This is the scene that we pass to Unity to create a model at runtime.</td></tr><tr>  <td><a href="Model.htm" >Model</a></td>  <td>Represents a single model.</td></tr><tr>  <td><a href="Geometry.htm" >Geometry</a></td>  <td>Represents geometry of a model with a single material. (Mesh data)</td></tr><tr>  <td><a href="BoneData.htm" >BoneData</a></td>  <td>Represents a single bone of a mesh. Each bone stores its own name and its parent's name so that we can create the hierarchy easier.</td></tr><tr>  <td><a href="WeightData.htm" >WeightData</a></td>  <td>Represents a single influence of a bone on a vertex. </td></tr><tr>  <td><a href="MaterialData.htm" >MaterialData</a></td>  <td>Represents a single material that was used in the scene. It contains texture and color properties. Materials are stored directly in a List in the <a href="GameScene.htm">GameScene</a> class. 
+  Geometry class just has a MaterialIndex to get the required material from the list.</td></tr></table><p><br>
+<br>
+<table border="0" cellpadding="3" width="99%">
+</table>
+
+</div><hr />
+<small>&nbsp;&nbsp;Last Updated: 25/01/15 | 
+&copy Burak Akdere 2015</small>
+<br clear="all" />
+<br/>
+</body>
+</html>

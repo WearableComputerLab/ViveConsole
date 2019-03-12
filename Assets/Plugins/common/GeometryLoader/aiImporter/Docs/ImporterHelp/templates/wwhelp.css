@@ -1,0 +1,507 @@
+body
+{
+	font-family: verdana;
+	font-weight: normal;
+	font-size: 8pt;
+	margin:0px;
+}
+
+a
+{
+	color: #0000FF;
+}
+
+a:visited
+{
+	color: #0000FF;
+}
+
+a:hover
+{
+	color: #3366FF;
+}
+
+table,td ,th
+{
+	font-weight: normal;
+	font-size: 14px;
+}
+
+pre
+{
+	font-family: monospace,courier new;
+	font-weight: normal;
+	font-size: 100%;
+	background: whitesmoke;
+	color: black;
+}
+.code
+{
+	font-family: monospace,courier new;
+	font-weight: bold;
+	font-size: 100%;
+	background: whitesmoke;
+	color: darkblue;
+}
+
+h1
+{
+	margin-top: 5px;
+	margin-bottom: 8pt;
+	padding: 4px;
+	font-weight: bold;
+	font-size: 120%;
+	background-color: #F7F7FF;
+	text-align: center;
+	color: #003399;
+
+}
+h2
+{
+	margin-top: 10px;
+	margin-bottom: 0pt;
+	font-size: 12pt
+	font-weight: bold;
+	color: #003399;
+	padding-top: 0pt;
+}
+h3
+{
+	margin-top: 10px;
+	font-weight: bold;
+	font-size: 11pt;
+	margin-bottom: 2px;
+	padding-bottom: 0px;
+	color: #003399;
+	padding-top: 0px;
+}
+h4
+{
+	margin-top: 0px;
+	font-weight: 800;
+	font-size: 100%;
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+	color: black;
+	padding-top: 0px;
+}
+h5
+{
+	margin-top: 0px;
+	font-weight: bold;
+	font-size: 10pt;
+	margin-bottom: -8px;
+	padding-bottom: 0px;
+	color: black;
+	padding-top: 0px;
+}
+
+b
+{
+	color: red;
+}
+
+ul, ol
+{
+	margin-top: 8px;
+	margin-bottom: 3px;
+	padding-bottom: 0px;
+	padding-top: 0px;
+}
+
+dl
+{
+	margin-top: 0px;
+	padding-left: 1px;
+}
+
+dt
+{
+	font-style: italic;
+}
+
+dd
+{
+	margin-bottom: 0px;
+	margin-left: 0px;
+}
+
+ul
+{
+	margin-left: 17px;
+	font-size : 14px;
+	list-style-type: disc;
+}
+
+
+ol
+{
+	margin-left: 28px;
+	list-style-type: decimal;
+}
+
+p
+{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	font-size:14px;
+}
+
+hr
+{
+	color: #003399
+	background: #F7F7FF;
+	border: 0;
+	height: 1px;
+}
+
+table
+{
+	border: none;
+	font-size: 100%;
+	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+td
+{
+	padding: 3px;
+	background-color: #F7F7FF;
+	border-bottom: solid 1px #D5D5D3;
+	margin: 1px;
+}
+
+th
+{
+	font-weight: bold;/
+	height: 16px;
+	background-color: #EFEFF7;
+	border-bottom: solid 1px #C8CDDE;
+	color: #000066;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: left;
+}
+
+small
+{
+	font-size: 8pt;
+}
+.alternaterow
+{
+	background-color: lavender;
+}
+.banner
+{
+	font-size: 100%;
+	border: 0px;
+	border-bottom: inset 1px #c8cdde;
+	background-color: #D4DFFF;
+	padding: 5px;
+	padding-bottom: 8px;
+}
+
+.projectname
+{
+	color: #003399;
+	padding-left: 4px;
+	font-size: 90%;
+}
+
+.topicname
+{
+	color: #003399;
+	font-size: 120%;
+	font-weight: bold;
+	padding-left: 4px;
+	padding-top: 4px;
+}
+.hotlinkbox
+{
+	position: absolute;
+	left: -10px;
+	top: 20px;
+	margin-left: 10pt;
+	background: cornsilk;
+	border: solid 1px darkblue;
+	width: auto;
+	padding: 10px;
+	padding-right: 35px;
+	font-size: 8pt;
+}
+.seealsotopics
+{
+	margin-left:10px;
+	margin-top: 3px;
+	line-height: 11pt;
+}
+.contentpane
+{		
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 15px;
+	margin-bottom: 10px;
+	min-width: 575px;
+}
+.contentbody
+{
+	margin-bottom: 15px;
+}
+
+.contentbody img
+{
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.syntaxbox
+{
+	font-family: Courier New, Courier;
+	font-weight: medium;
+	font-size: 9pt;
+	border: solid 1px Gray;
+	padding: 12px;
+	margin: 15px;
+	margin-left: 0px;
+	background: #F7F7FF;
+	overflow: hidden;
+}
+
+.syntaxoverloads
+{
+	font-size: 8pt;
+	font-family: Courier New, Courier;
+	font-weight: medium;
+	margin-top: 4px;
+        color: black;
+	padding: 4px;
+	background: #fafaFF;
+	border: solid 1px #C8CDDE;
+}
+
+.notebox
+{
+	background: lightblue;
+	padding: 10px;
+	border: solid 1px navy;
+	margin: 5px 40px 15px 30px;
+	font-size: 8pt;
+}
+.updatenotice
+{
+	border: solid 1px darkred;
+	background: cornsilk;
+	font-size: 8pt;
+	color: darkred;
+	margin: 10px 40px 10px 30px;
+	padding: 10px;
+}
+.outdent, .outdentmargin
+{
+	margin-left: -10px;
+}
+.outdentmargin
+{
+	margin-bottom: 8px;
+}
+.detailtable
+{
+	font-size: 8pt;
+	border: none;
+	margin-top: 10px;
+	margin-bottom: 5px;
+
+}
+.detailtable td
+{
+	vertical-align: top;
+	background-color: #F7F7FF;
+	border-bottom: solid 1px #D5D5D3;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin: 1px;
+}
+
+.detailtable td img
+{
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+.tocbody
+{
+	font-size: 8pt;
+}
+/* general code parsing */
+.codec1
+{
+	color: blue;
+}
+.codec2
+{
+	color: blue;
+	font-weight: bold;
+}
+.codec3
+{
+	color: blue;
+}
+.codec4
+{
+	color: blue;
+}
+.codec5  / * literal */
+{color: yellow;}
+.codec6
+{
+	color: blue;
+}
+.codec7
+{
+	color: blue;
+}
+.codec8
+{
+	color: blue;
+}
+.codec9
+{
+	color: blue;
+}
+.codec10
+{
+	color: blue;
+}
+.codecomment
+{
+	color: green;
+}
+.codestring
+{
+	color: teal;
+}
+.codestrong
+{
+	border: black solid 1px;
+	background-color: #ffd700;
+	padding-left: 1px;
+	padding-right: 1px;
+}
+.codestrike
+{
+	text-decoration: line-through;
+}
+.vfpcode .programcontrol
+{
+	color: blue;
+}
+.vfpcode .functions
+{
+	color: blue;
+}
+.vfpcode .commands
+{
+	color: blue;
+}
+.vfpcode .methods
+{
+	color: blue;
+}
+.vfpcode .properties
+{
+	color: blue;
+}
+.vfpcode .classes
+{
+	color: red;
+	font-size: 120%;
+	font-variant: small-caps;
+}
+.vfpcode .events
+{
+	color: #483d8b;
+}
+.vfpcode .systemvars
+{
+	color: blue;
+}
+.vbcode .constants
+{
+	color: blue;
+	font-face: bold;
+}
+.vbcode .datatypes
+{
+	color: darkblue;
+	font-face: bold;
+}
+.vbcode .keywords
+{
+	color: blue;
+}
+.vbcode .statements
+{
+	color: blue;
+}
+.vbcode .functions
+{
+	color: blue;
+}
+.vbcode .depracated
+{
+	color: grey;
+	font-size: 120%;
+	font-variant: small-caps;
+}
+.csharpcode .programcontrol
+{
+	color: blue;
+}
+.csharpcode .datatypes
+{
+	color: blue;
+}
+.csharpcode .literals
+{
+	color: darkblue;
+}
+.csharpcode .operators
+{
+	color: blue;
+}
+.csharpcode .preprocessor
+{
+	color: lightblue;
+}
+.htmlcode .elements
+{
+	color: darkred;
+}
+.htmlcode .attributes
+{
+	color: red;
+}
+.htmlcode .codestring
+{
+	color: teal;
+	background: ;
+}
+.xmlcode .elements
+{
+	color: darkred;
+}
+.xmlcode .attributes
+{
+	color: red;
+}
+.xmlcode .commands
+{
+	color: darkred;
+	font-weight: bold;
+}
+.xmlcode .codestring
+{
+	color: teal;
+	background: ;
+}
