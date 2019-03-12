@@ -27,7 +27,7 @@ Example images of the SAR project
 ![](Images/Console.png)
 
 Console Demo.
-- Uses Motive Tracking Software to track the console and a pen for selecting items
+- Uses vive lighthouses to track the console and a pen for selecting items
 - Additionally uses a tablet on the local network to add items to the console and change tools
 
 ### Authors
