@@ -1,4 +1,4 @@
-# Console Editor
+# Vive Console Editor
 Console Demo which uses a tablet and SAR to populate a control panel with objects. 
 
 ## IMPORTANT
