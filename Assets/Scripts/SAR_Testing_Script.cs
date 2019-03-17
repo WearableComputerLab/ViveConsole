@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 
-
 public class SAR_Testing_Script : MonoBehaviour {
 
     public string[] Devices;

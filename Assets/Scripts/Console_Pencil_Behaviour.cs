@@ -68,7 +68,7 @@ public class Console_Pencil_Behaviour : MonoBehaviour {
     private void Update() {
 
 
-        Cursor.visible = false;
+        //Cursor.visible = false;
         //pivotPoint.position = cursor.position;
 
         preVelocity = cursor.position;

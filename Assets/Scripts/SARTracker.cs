@@ -80,8 +80,9 @@ public class SARTracker : MonoBehaviour {
 
     // Returns whether the button is pressed from the vive tracker
     public bool isPressingButton() {
-        SteamVR_Controller.Device Controller = SteamVR_Controller.Input(DeviceID);
-        return Controller.GetHairTriggerDown();
+        //SteamVR_Controller.Device Controller = SteamVR_Controller.Input(DeviceID);
+        //return Controller.GetHairTriggerDown();
+        return false;
     }
 
 }
