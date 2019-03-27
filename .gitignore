@@ -1,30 +1,56 @@
 # ================ #
 # Project Specific #
 # ================ #
-
+/[Bb]uilds/
+/[Bb]uild/
 
 # =============== #
 # Unity generated #
 # =============== #
-Temp/
-Obj/
-UnityGenerated/
-Library/
-Assets/AssetStoreTools*
+/[Tt]emp/
+/[Oo]bj/
+/[Uu]nityGenerated/
+/[Ll]ibrary/
+/[Ll]ogs/
 
-# ===================================== #
-# Visual Studio / MonoDevelop generated #
-# ===================================== #
+# Never ignore Asset meta data
+!/[Aa]ssets/**/*.meta
+
+/[Aa]ssets/AssetStoreTools*
+
+# =============================================== #
+# Visual Studio / MonoDevelop / Consulo generated #
+# =============================================== #
 ExportedObj/
-*.svd
-*.userprefs
+.consulo/
 *.csproj
-*.pidb
-*.suo
-*.sln
-*.user
 *.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
 *.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Visual Studio cache directory
+.vs/
+
+# Gradle cache directory
+.gradle/
+
+# Unity3D generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity3D generated file on crash reports
+sysinfo.txt
 
 # ============ #
 # OS generated #
