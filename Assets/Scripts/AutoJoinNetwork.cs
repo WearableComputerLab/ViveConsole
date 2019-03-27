@@ -9,14 +9,14 @@ public class AutoJoinNetwork : NetworkBehaviour {
 
 	// Update is called once per frame
 	private void Update () {
-        if(Network.isClient == false && connect == false){
-            NetworkManager.singleton.networkAddress = "10.160.37.202";
-            NetworkManager.singleton.networkPort = 1616;
-		    NetworkManager.singleton.StartClient();
-            connect = true;
-        }
+      //  if(Network.isClient == false && connect == false){
+      //      NetworkManager.singleton.networkAddress = "10.160.37.202";
+      //      NetworkManager.singleton.networkPort = 1616;
+		    //NetworkManager.singleton.StartClient();
+      //      connect = true;
+      //  }
 	}
-    private void OnDisconnectedFromServer(NetworkDisconnection info) {
-            connect = false;
-    }
+    //private void OnDisconnectedFromServer(NetworkDisconnection info) {
+    //        connect = false;
+    //}
 }

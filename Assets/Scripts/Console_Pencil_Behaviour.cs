@@ -152,7 +152,7 @@ public class Console_Pencil_Behaviour : MonoBehaviour {
     // As you move object it follows normals of mesh
     private void FollowNormal() {
         forwardDirection = cone.TransformDirection(Vector3.forward);
-        Debug.DrawRay(cone.position,forwardDirection,Color.yellow,rayDist,true);
+        Debug.DrawRay(cone.position,forwardDirection,Color.yellow, 0, true);
         ray = new Ray(cone.position,forwardDirection);
 		if(Physics.Raycast(ray,out hit,rayDist,LayerMask.GetMask("Default")) && drag == false && mode != Mode.Scale) {
            moveObject.localPosition = new Vector3(0,0.05f,0.05f);

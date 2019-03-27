@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityStandardAssets.ImageEffects;
 
 [SelectionBase]
 public class Scale_Object : MonoBehaviour {
