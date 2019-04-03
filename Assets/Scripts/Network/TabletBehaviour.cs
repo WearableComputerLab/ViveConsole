@@ -39,9 +39,16 @@ public class TabletBehaviour : NetworkBehaviour {
             SwitchModes(); 
         }
         if (isOnTablet) {
-            if (currentMode.Equals("Add") || currentMode.Equals("Move") || currentMode.Equals("Vertical") 
-                || currentMode.Equals("Horizontal") || currentMode.Equals("Rotate") || currentMode.Equals("Clone")
-                || currentMode.Equals("Copy") || currentMode.Equals("Paste") || currentMode.Equals("Cut")) {
+            if (currentMode.Equals("Add") ||
+                currentMode.Equals("Move") ||
+                currentMode.Equals("Vertical") ||
+                currentMode.Equals("Horizontal") ||
+                currentMode.Equals("Rotate") ||
+                currentMode.Equals("Clone") ||
+                currentMode.Equals("Copy") ||
+                currentMode.Equals("Paste") ||
+                currentMode.Equals("Cut"))
+            {
                 page1.transform.localPosition = Vector3.Lerp(page1.transform.localPosition,new Vector3(0,-0.5f,-0.05f),3 * Time.deltaTime);
                 if(currentMode.Equals("Add")){
                     page2.gameObject.SetActive(true);
