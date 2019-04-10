@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/console-demo.unity
+    path: Assets/Scenes/console-demo.unity
     guid: 3f758bd6830063c47b906a944c39a001
   - enabled: 0
-    path: Assets/tablet-console.unity
+    path: Assets/Scenes/tablet-console.unity
     guid: 44cc5cb5e69f26245ba49f923b6053fa
   - enabled: 0
     path: 
@@ -27,5 +27,6 @@ EditorBuildSettings:
     path: 
     guid: 6a8a08d896ba5ca4a824a039b8f6c19a
   - enabled: 0
-    path: Assets/calibration_test.unity
+    path: Assets/Scenes/calibration_test.unity
     guid: 942ae1a935734014f93c73b73db77906
+  m_configObjects: {}
