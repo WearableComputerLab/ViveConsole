@@ -36,9 +36,12 @@ public class ModulePool : MonoBehaviour
                 for (int i = 0; i < DEFAULT_POOL_SIZE; ++i)
                 {
                     var obj = Instantiate(_prefab, _root, false);
+                    (obj as GameObject)?.SetActive(false);
+                    (obj as MonoBehaviour)?.gameObject.SetActive(false);
                     _poolStorage.Push(obj);
                 }
             }
+
             return _poolStorage.Pop();
         }
     }
@@ -59,7 +62,9 @@ public class ModulePool : MonoBehaviour
     {
         if (!_objectPools.ContainsKey(id))
             throw new System.Exception($"Module {id} has no prefab set");
-        return _objectPools[id].Request();
+        var newModule = _objectPools[id].Request();
+        newModule.gameObject.SetActive(true);
+        return newModule;
     }
 
     public void ReturnModule(ConsoleModule module)
@@ -67,6 +72,7 @@ public class ModulePool : MonoBehaviour
         if (!_objectPools.ContainsKey(module._id))
             throw new System.Exception($"Module identifier {module._id} not recognized");
 
+        module.gameObject.SetActive(false);
         _objectPools[module._id].Return(module);
     }
 }

@@ -65,6 +65,9 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _description: Group of 6 square buttons
+  _productCode: XB6S001
+  _designNotes: Create space between buttons
 --- !u!1001 &3923477018105225559
 PrefabInstance:
   m_ObjectHideFlags: 0

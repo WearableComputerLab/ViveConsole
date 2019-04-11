@@ -52,6 +52,9 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _description: Standard Red Button
+  _productCode: XBR001
+  _designNotes: Plain button
 --- !u!65 &7047153192456966211
 BoxCollider:
   m_ObjectHideFlags: 0

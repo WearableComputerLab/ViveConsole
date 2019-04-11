@@ -65,6 +65,9 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _description: Standard Red button
+  _productCode: XBR002
+  _designNotes: 
 --- !u!1001 &5884372792542327816
 PrefabInstance:
   m_ObjectHideFlags: 0

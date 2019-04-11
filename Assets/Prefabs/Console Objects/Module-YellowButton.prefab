@@ -52,6 +52,9 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _description: Large yellow button
+  _productCode: XBYL001
+  _designNotes: 
 --- !u!65 &2377224008513792370
 BoxCollider:
   m_ObjectHideFlags: 0

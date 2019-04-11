@@ -65,6 +65,9 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _description: 3 Circular Buttons
+  _productCode: XB3C001
+  _designNotes: Can be placed horizontally or vertically
 --- !u!1001 &3624252524069602770
 PrefabInstance:
   m_ObjectHideFlags: 0

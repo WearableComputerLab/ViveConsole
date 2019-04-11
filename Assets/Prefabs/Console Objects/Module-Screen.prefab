@@ -66,6 +66,9 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _description: Output screen
+  _productCode: XBS001
+  _designNotes: Can change displayed content if required
 --- !u!1001 &245618834669528102
 PrefabInstance:
   m_ObjectHideFlags: 0

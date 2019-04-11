@@ -72,7 +72,7 @@ public partial class ConsoleBase : MonoBehaviour
         // what their locaton on that panel is
 
         var layout = new ModuleLayout();
-        layout._layoutName = "Temp";
+        layout._layoutName = "Test Layout";
         layout._consoleBaseId = _id;
 
         layout._panelLayouts = new List<ModuleLayout.ModuleConfig>();
@@ -96,6 +96,11 @@ public partial class ConsoleBase : MonoBehaviour
         var jsonFilename = layout._layoutName + "Layout.json";
         var jsonPath = Path.Combine(Application.temporaryCachePath, jsonFilename);
         File.WriteAllBytes(jsonPath, jsonBytes);
+
+        var report = new ReportBuilder();
+        report.layout = layout;
+        report.SaveReport();
+
         // TODO: What about annotations? Currently a line renderer, but that is hard to capture in a report document
     }
 

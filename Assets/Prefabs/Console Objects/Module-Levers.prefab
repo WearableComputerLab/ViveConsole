@@ -52,6 +52,9 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _description: Group of 4 sliders/levers
+  _productCode: XL4001
+  _designNotes: Not operational
 --- !u!65 &5732734426341196514
 BoxCollider:
   m_ObjectHideFlags: 0

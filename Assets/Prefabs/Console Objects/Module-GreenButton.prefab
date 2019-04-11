@@ -52,6 +52,9 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _description: Standard Green Button
+  _productCode: XBG001
+  _designNotes: 
 --- !u!65 &2525208134719988922
 BoxCollider:
   m_ObjectHideFlags: 0
