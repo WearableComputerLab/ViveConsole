@@ -18,6 +18,11 @@ public class ModulePool : MonoBehaviour
             _poolStorage = new Stack<T>();
         }
 
+        public T Prefab()
+        {
+            return _prefab;
+        }
+
         public void Return(T t)
         {
             if (_poolStorage.Contains(t))
@@ -74,5 +79,12 @@ public class ModulePool : MonoBehaviour
 
         module.gameObject.SetActive(false);
         _objectPools[module._id].Return(module);
+    }
+
+    public ConsoleModule GetPrefab(int id)
+    {
+        if (!_objectPools.ContainsKey(id))
+            throw new System.Exception($"Module {id} has no prefab set");
+        return _objectPools[id].Prefab();
     }
 }

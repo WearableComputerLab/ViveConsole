@@ -60,9 +60,22 @@ public partial class ConsoleBase : MonoBehaviour
         }
 
         public string _layoutName;
+        public string _version;
         public int _consoleBaseId;
         public List<ModuleConfig> _panelLayouts;
+        
+        public ModuleLayout()
+        {
+            _version = "1.0";
+        }
 
+        public ModuleLayout(ModuleLayout layout)
+        {
+            _layoutName = layout._layoutName;
+            _version = "1.0";
+            _consoleBaseId = layout._consoleBaseId;
+            _panelLayouts = new List<ModuleConfig>(layout._panelLayouts);
+        }
     }
 
     public void SaveCurrentLayout()
@@ -97,10 +110,17 @@ public partial class ConsoleBase : MonoBehaviour
         var jsonPath = Path.Combine(Application.temporaryCachePath, jsonFilename);
         File.WriteAllBytes(jsonPath, jsonBytes);
 
-        var report = new ReportBuilder();
-        report.layout = layout;
-        report.SaveReport();
+        var report = new ReportBuilder
+        {
+            layout = layout,
+            baselineLayout = new ModuleLayout(layout)
+        };
 
+        report.layout._panelLayouts.RemoveAt(1);
+        report.baselineLayout._panelLayouts.RemoveAt(0);
+
+        report.SaveReport();
+        report.GenerateDiffReport();
         // TODO: What about annotations? Currently a line renderer, but that is hard to capture in a report document
     }
 

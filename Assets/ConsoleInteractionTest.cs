@@ -42,10 +42,11 @@ public class ConsoleInteractionTest : MonoBehaviour
 
     void UpdateSelectedModule()
     {
+        const float DRAG_HEIGHT = 0.01f;
         if (Input.GetMouseButtonUp(0))
         {
             // drop the selected module
-            _selectedModule.transform.Translate(Vector3.back * 0.05f);
+            _selectedModule.transform.Translate(Vector3.back * DRAG_HEIGHT);
             _selectedModule = null;
         }
         else
@@ -60,7 +61,7 @@ public class ConsoleInteractionTest : MonoBehaviour
                 _selectedModule.SetPanel(panel);
                 _selectedModule.transform.position = raycastHit.point;
                 _selectedModule.transform.localRotation = currentRotation;
-                _selectedModule.transform.Translate(Vector3.forward * 0.05f);
+                _selectedModule.transform.Translate(Vector3.forward * DRAG_HEIGHT);
             }
         }
     }
