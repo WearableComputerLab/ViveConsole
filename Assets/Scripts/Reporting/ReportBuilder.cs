@@ -35,12 +35,13 @@ public class ReportBuilder
         report = new XDocument();
 
         // Attach a stylesheet to the xml file, this is done by creating a procesing instruction.
-        report.Add(new XProcessingInstruction("xml-stylesheet", "href='report.css' title='Compact' type='text/css'"));
+        report.Add(new XProcessingInstruction("xml-stylesheet", "href='report.xslt' type='text/xml'"));
 
-        var reportElement = new XElement("report", BuildReportDescription());
+        var reportElement = new XElement("report", BuildReportDescription(), BuildReportIntro());
         report.Add(reportElement);
 
         var panelElement = new XElement("panel", new XAttribute("name", "Upper panel"),
+            new XElement("overview_image_filepath", "screenshot.png"),
             from p in layout._panelLayouts
             where p.panelId == 0
             let entry = BuildModuleDescription(p, mp)
@@ -68,6 +69,17 @@ public class ReportBuilder
         return reportDescription;
     }
 
+    private XElement BuildReportIntro()
+    {
+        var reportIntro = new XElement("intro",
+            new XElement("client", "Jerry Client, Title, Company"),
+            new XElement("operator", "Amy Worker, Title, Company"),
+            new XElement("source_cad_filepath", "file://c/path/to/Example%20Source%20CAD.sketch"),
+            new XElement("source_cad_name","Example Source CAD.sketch")
+            );
+        return reportIntro;
+    }
+
     private static XElement BuildModuleDescription(ModuleLayout.ModuleConfig p, ModulePool mp)
     {
         // We need some data from the ConsoleModule itself, so grab one from the pool then return it once we're done
@@ -76,15 +88,19 @@ public class ReportBuilder
             new XElement("name", moduleData.gameObject.name),
             new XElement("id", p.id.ToString()),
             new XElement("position", GetPositionString(ref p)),
-            new XElement("scale", p.scale),
-            new XElement("rotation", p.eulerAngles),
+            new XElement("scale", GetScaleString(ref p)),
+            new XElement("rotation", GetRotationString(ref p)),
             new XElement("description", moduleData._description),
             new XElement("product_id", moduleData._productCode),
             new XElement("design_notes", moduleData._designNotes));
         return entry;
     }
 
-    private static string GetPositionString(ref ModuleLayout.ModuleConfig p) => $"X: {p.position.x * 100:0.00} cm\nY: {p.position.y * 100:0.00} cm"; //return p.position.ToString("F3");
+    private static string GetPositionString(ref ModuleLayout.ModuleConfig p) => $"X: {p.position.x * 100:0.00} cm\nY: {p.position.z * 100:0.00} cm\nZ: {p.position.y * 100:0.00} cm"; //return p.position.ToString("F3");
+
+    private static string GetScaleString(ref ModuleLayout.ModuleConfig p) => $"X: {p.scale.x:0.00} Y: {p.scale.y:0.00} Z: {p.scale.z:0.00}";
+
+    private static string GetRotationString(ref ModuleLayout.ModuleConfig p) => $"{p.eulerAngles.y:0.00}";
 
     public void GenerateDiffReport()
     {

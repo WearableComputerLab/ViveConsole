@@ -35,10 +35,13 @@ public partial class ConsoleBase
                 GUILayout.BeginVertical("box");
                 foreach (var m in panel._modules)
                 {
-                    GUILayout.Label($"{m.gameObject.name} (id = {m._id})");
-                    GUILayout.Label($" - Position: {m.transform.localPosition.ToString("F4")}", "box");
-                    GUILayout.Label($" - Scale: {m.transform.localScale.ToString("F4")}", "box");
-                    GUILayout.Label($" - Rotation: {m.transform.localEulerAngles}", "box");
+                    if (m)
+                    {
+                        GUILayout.Label($"{m.gameObject.name} (id = {m._id})");
+                        GUILayout.Label($" - Position: {m.transform.localPosition.ToString("F4")}", "box");
+                        GUILayout.Label($" - Scale: {m.transform.localScale.ToString("F4")}", "box");
+                        GUILayout.Label($" - Rotation: {m.transform.localEulerAngles}", "box");
+                    }
                 }
                 GUILayout.EndVertical();
             }

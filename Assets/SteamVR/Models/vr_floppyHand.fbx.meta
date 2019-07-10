@@ -55,12 +55,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Abyss
-    second: {fileID: 2100000, guid: d3ba4dc842bea224d8030c728e5d81ba, type: 2}
+    second: {fileID: 2100000, guid: 9b01d7c0e4dfa854eb5dfe2624e27c0f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: floppyHand
-    second: {fileID: 2100000, guid: 54d36ec3624f94b4896da1d02ddb09e7, type: 2}
+    second: {fileID: 2100000, guid: f1f5a7b9d67d8354799973d55caf81ad, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

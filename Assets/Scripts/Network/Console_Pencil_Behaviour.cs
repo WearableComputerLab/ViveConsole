@@ -11,7 +11,6 @@ public class Console_Pencil_Behaviour : MonoBehaviour
     private float rayDist = 10;
     private float rotation;
     private bool drag = false;
-    private RaycastHit hit;
     private Ray ray;
     private Ray downRay;
     private Vector3 forwardDirection;
@@ -51,20 +50,17 @@ public class Console_Pencil_Behaviour : MonoBehaviour
         drawing_pencil = GetComponentInChildren<Drawing_Pencil>();
         object_scaler = FindObjectOfType<ObjectScaler>();
         drawing_pencil.draw = false;
-        pivotPoint = FindObjectOfType<Pivot>().transform;
+        pivotPoint = new GameObject("Pivot").GetComponent<Transform>();
+        pivotPoint.gameObject.hideFlags = HideFlags.DontSave | HideFlags.NotEditable;
         rotationOffset = new GameObject("rotationOffset");
         cursor = transform.GetChild(2);
         cursorMesh = cursor.GetComponent<MeshRenderer>();
-        axis = FindObjectOfType<Axis_Object>().GetComponent<MeshRenderer>();
-        axis.enabled = false;
+        axis = FindObjectOfType<Axis_Object>()?.GetComponent<MeshRenderer>();
+        if (axis) axis.enabled = false;
         eraser = transform.GetChild(3).GetComponent<MeshRenderer>();
         clone_tool = transform.GetChild(4).GetComponent<MeshRenderer>();
         cursorColors[0] = cursorMesh.material.GetColor("_TintColor");
-        float r = 208 / 255f;
-        float g = 12 / 255f;
-        float b = 12 / 255f;
-        float a = 18 / 255f;
-        cursorColors[1] = new Color(r, g, b, a);
+        cursorColors[1] = new Color32(208, 12, 12, 18);
     }
 
     private void Update()
@@ -79,9 +75,13 @@ public class Console_Pencil_Behaviour : MonoBehaviour
         if (moveObject != null)
         {
             FollowNormal();
-            axis.enabled = true;
-            axis.transform.position = moveObject.position + (axis.transform.TransformDirection(Vector3.forward) * 0.1f);
-            axis.transform.rotation = moveObject.rotation;
+            if (axis)
+            {
+                axis.enabled = true;
+                axis.transform.position = moveObject.position + (axis.transform.TransformDirection(Vector3.forward) * 0.1f);
+                axis.transform.rotation = moveObject.rotation;
+
+            }
             if (mode == Mode.Vertical)
             {
                 pivotPoint.position = new Vector3(pivotPoint.position.x, cursor.position.y, cursor.position.z);
@@ -101,7 +101,7 @@ public class Console_Pencil_Behaviour : MonoBehaviour
             moveObject.gameObject.GetComponent<BoxCollider>().enabled = true;
             moveObject.gameObject.GetComponentInChildren<Axis_Object>().gameObject.SetActive(true);
             moveObject = null;
-            axis.enabled = false;
+            if (axis) axis.enabled = false;
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -170,7 +170,7 @@ public class Console_Pencil_Behaviour : MonoBehaviour
             upTime -= Time.deltaTime;
         }
         SwitchMode();
-        moveCursor();
+        MoveCursor();
 
         Vector3 q = new Vector3(transform.eulerAngles.x + 180, transform.eulerAngles.y + 180, transform.eulerAngles.z);
         rotationOffset.transform.eulerAngles = q;
@@ -184,7 +184,7 @@ public class Console_Pencil_Behaviour : MonoBehaviour
         forwardDirection = cone.TransformDirection(Vector3.forward);
         Debug.DrawRay(cone.position, forwardDirection, Color.yellow, 0, true);
         ray = new Ray(cone.position, forwardDirection);
-        if (Physics.Raycast(ray, out hit, rayDist, LayerMask.GetMask("Default")) && drag == false && mode != Mode.Scale)
+        if (Physics.Raycast(ray, out RaycastHit hit, rayDist, LayerMask.GetMask("Default")) && drag == false && mode != Mode.Scale)
         {
             moveObject.localPosition = new Vector3(0, 0.05f, 0.05f);
             pivotPoint.rotation = Quaternion.FromToRotation(pivotPoint.TransformDirection(Vector3.forward), hit.normal) * pivotPoint.rotation;
@@ -229,22 +229,39 @@ public class Console_Pencil_Behaviour : MonoBehaviour
         }
     }
 
-    private void moveCursor()
+    private void MoveCursor()
     {
         Vector3 f = cone.TransformDirection(Vector3.forward);
-        Debug.DrawRay(cone.position, f, Color.yellow, rayDist, true);
+        Debug.DrawRay(cone.position, f, Color.yellow, 0, true);
         Ray r = new Ray(cone.position, f);
-        if (Physics.Raycast(r, out hit, rayDist, LayerMask.GetMask("Default")))
+        if (Physics.Raycast(r, out RaycastHit hit, rayDist, LayerMask.GetMask("Furniture")))
         {
+            if (Input.GetMouseButton(1) || Valve.VR.SteamVR_Actions.default_InteractUI.state)
+            {
+                var annotationLayer = hit.transform.GetComponentInParent<AnnotationLayer>();
+                var annotateTex = annotationLayer.GetComponentInChildren<AnnotateTexture>();
+                // update ray with annotateTexture
+                if (Input.GetMouseButtonDown(1) || Valve.VR.SteamVR_Actions.default_InteractUI.stateDown)
+                {
+                    // start a ray with the annotateTexture
+                    annotateTex.OnBeginRay(r);
+                }
+                else
+                    annotateTex.OnUpdateRay(r);
+            }
+
             cursor.position = hit.point + hit.normal * 0.01f; ;
             clone_tool.transform.position = hit.point;
             drawing_pencil.transform.position = hit.point + hit.normal * 0.01f;
             cursor.rotation = Quaternion.FromToRotation(cursor.TransformDirection(Vector3.forward), hit.normal) * cursor.rotation;
             if (hit.transform.tag == "Grabbable")
             {
-                axis.transform.gameObject.SetActive(true);
-                axis.transform.position = hit.transform.position + (axis.transform.TransformDirection(Vector3.forward) * 0.1f);
-                axis.transform.rotation = hit.transform.rotation;
+                if (axis)
+                {
+                    axis.transform.gameObject.SetActive(true);
+                    axis.transform.position = hit.transform.position + (axis.transform.TransformDirection(Vector3.forward) * 0.1f);
+                    axis.transform.rotation = hit.transform.rotation;
+                }
                 if (Input.GetMouseButtonDown(0))
                 {
                     if (moveObject == null && mode != Mode.Delete && mode != Mode.Clone && mode != Mode.Scale)

@@ -20,7 +20,7 @@ public partial class ConsoleBase : MonoBehaviour
     {
         var newModule = _modulePool?.RequestModule(moduleId);
         var panel = GetPanelWithId(panelId) ?? 
-            _modulePanels[Random.Range(0, _modulePanels.Count)];
+            _modulePanels[UnityEngine.Random.Range(0, _modulePanels.Count)];
 
         newModule.SetPanel(panel);
         newModule.transform.localEulerAngles = new Vector3(0, 180, 0);
@@ -78,6 +78,12 @@ public partial class ConsoleBase : MonoBehaviour
         }
     }
 
+    internal void RemoveModule(ConsoleModule deleteTarget)
+    {
+        // TODO: clean up any references to this module before returning to pool
+        _modulePool.ReturnModule(deleteTarget);
+    }
+
     public void SaveCurrentLayout()
     {
         // Build a list of all modules,
@@ -95,7 +101,7 @@ public partial class ConsoleBase : MonoBehaviour
             var config = new ModuleLayout.ModuleConfig()
             {
                 id = m._id,
-                panelId = m._panel._id,
+                panelId = m._panel?._id ?? -1,
                 position = m.transform.localPosition,
                 scale = m.transform.localScale,
                 eulerAngles = m.transform.localEulerAngles
@@ -106,7 +112,7 @@ public partial class ConsoleBase : MonoBehaviour
         _savedLayout = layout;
         var json = JsonUtility.ToJson(layout);
         var jsonBytes = Encoding.UTF8.GetBytes(json);
-        var jsonFilename = layout._layoutName + "Layout.json";
+        var jsonFilename = layout._layoutName + ".json";
         var jsonPath = Path.Combine(Application.temporaryCachePath, jsonFilename);
         File.WriteAllBytes(jsonPath, jsonBytes);
 
@@ -121,6 +127,8 @@ public partial class ConsoleBase : MonoBehaviour
 
         report.SaveReport();
         report.GenerateDiffReport();
+
+        ReportScreenshot.TakeScreenshot(_modulePanels[0].gameObject);
         // TODO: What about annotations? Currently a line renderer, but that is hard to capture in a report document
     }
 
@@ -130,7 +138,7 @@ public partial class ConsoleBase : MonoBehaviour
         // Restore layout from a serialized file
         // Modules will need an id so we can create the right ones
         // ConsoleBase game object may also change(?) or should just check that the layout is compatible with this Console
-        var jsonPath = Path.Combine(Application.temporaryCachePath, "TempLayout.json");
+        var jsonPath = Path.Combine(Application.temporaryCachePath, "Test Layout.json");
         if (File.Exists(jsonPath) == false)
             return;
 

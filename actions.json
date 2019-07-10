@@ -41,6 +41,18 @@
       "requirement": "optional"
     },
     {
+      "name": "/actions/default/in/RadialThumb",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/default/in/ShowRadialMenu",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/ConfirmRadialMenu",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
@@ -142,7 +154,10 @@
       "/actions/default/in/SkeletonRightHand": "Skeleton (Right)",
       "/actions/default/in/Teleport": "Teleport",
       "/actions/default/out/Haptic": "Haptic",
-      "/actions/platformer/in/Jump": "Jump"
+      "/actions/platformer/in/Jump": "Jump",
+      "/actions/default/in/RadialThumb": "Radial Menu Position",
+      "/actions/default/in/ShowRadialMenu": "Show Radial Menu",
+      "/actions/default/in/ConfirmRadialMenu": "Confirm Radial Menu"
     }
   ]
 }
