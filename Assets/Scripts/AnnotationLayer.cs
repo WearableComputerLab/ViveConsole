@@ -17,7 +17,7 @@ public class AnnotationLayer : MonoBehaviour
         // Create an AnnotateTexture component to draw into
         var annotationTextureGO = new GameObject("AnnotationTexture");
         annotationTextureGO.transform.SetParent(transform, false);
-        annotationTextureGO.transform.Translate(Vector3.back * 0.02f, Space.Self);
+        //annotationTextureGO.transform.Translate(Vector3.back * 0.02f, Space.Self);
         annotateTexture = annotationTextureGO.AddComponent<AnnotateTexture>();
         annotateTexture.CreateCanvas(2000, 2000, annotateShader);
         //annotateTexture.enabled = false;

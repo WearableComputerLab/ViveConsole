@@ -154,7 +154,7 @@ public class AnnotateTexture : MonoBehaviour//, IDragHandler, IBeginDragHandler
         collider.sharedMesh = mesh;
         
         canvas = gameObject.AddComponent<MeshRenderer>();
-        canvas.material = new Material(Shader.Find("Unlit/Transparent"));
+        canvas.material = new Material(Shader.Find("Unlit/AnnotationShader"));
         var mat = canvas.material;
         var tex = mat.mainTexture;
         //var drawableTexture = new Texture2D(tex.width, tex.height, TextureFormat.RGBA32, false);
@@ -173,8 +173,14 @@ public class AnnotateTexture : MonoBehaviour//, IDragHandler, IBeginDragHandler
         };
         //var drawableTexture = new RenderTexture(renderTextDesc);
         var drawableTexture = new RenderTexture(
-            width, height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
-        drawableTexture.useMipMap = true;
+            width,
+            height,
+            0,
+            RenderTextureFormat.ARGB32,
+            RenderTextureReadWrite.sRGB)
+        {
+            useMipMap = true
+        };
 
         RenderTexture.active = drawableTexture;
         GL.Clear(false, true, Color.clear);

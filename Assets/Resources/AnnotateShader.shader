@@ -1,4 +1,4 @@
-﻿Shader "Unlit/AnnotateShader"
+Shader "Unlit/AnnotateShader"
 {
 	SubShader
 	{

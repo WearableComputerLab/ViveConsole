@@ -174,7 +174,7 @@ public class ConsoleInteractionTest : MonoBehaviour
 
             if (Valve.VR.SteamVR_Actions.default_ConfirmRadialMenu.stateDown)
             {
-                UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.GetComponent<Button>().onClick.Invoke();
+                UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject?.GetComponent<Button>().onClick.Invoke();
             }
         }
         else
