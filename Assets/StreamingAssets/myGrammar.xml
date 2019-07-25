@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<grammar version="1.0" xml:lang="en" mode="voice" root="Rank"
+xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+
+  <rule id="Rank">
+    <one-of>
+      <item>Test</item>
+      <item>Delete</item>
+      <item> ace </item>
+      <item> two </item>
+      <item> three </item>
+      <item> four </item>
+      <item> five </item>
+      <item> six </item>
+      <item> seven </item>
+      <item> eight </item>
+      <item> nine </item>
+      <item> ten </item>
+      <item> jack </item>
+      <item> queen </item>
+      <item> king </item>
+      <item> lady </item>
+      <item> emperor </item>
+    </one-of>
+  </rule>
+
+</grammar>
