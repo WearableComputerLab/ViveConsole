@@ -1,27 +1,78 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<grammar version="1.0" xml:lang="en" mode="voice" root="Rank"
-xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+<grammar version="1.0" xml:lang="en-AU" mode="voice" root="toplevel" 
+  xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
 
-  <rule id="Rank">
+  <rule id="toplevel" scope="public">
     <one-of>
-      <item>Test</item>
-      <item>Delete</item>
-      <item> ace </item>
-      <item> two </item>
-      <item> three </item>
-      <item> four </item>
-      <item> five </item>
-      <item> six </item>
-      <item> seven </item>
-      <item> eight </item>
-      <item> nine </item>
-      <item> ten </item>
-      <item> jack </item>
-      <item> queen </item>
-      <item> king </item>
-      <item> lady </item>
-      <item> emperor </item>
+      <item>
+        <ruleref uri="#Delete"/>
+        <tag> out.Command = rules.Delete; </tag>
+      </item>
+      <item>
+        <ruleref uri="#Copy"/>
+        <tag> out.Command = rules.Copy; </tag>
+      </item>
+      <item>
+        <ruleref uri="#Move"/>
+        <tag> out.Command = rules.Move; </tag>
+      </item>
+      <item>
+        <ruleref uri="#Annotate"/>
+        <tag> out.Command = rules.Annotate; </tag>
+      </item>
     </one-of>
+  </rule>
+
+  <rule id="Delete" scope="public">
+    <item repeat="0-1"> please </item>
+    <one-of>
+      <item> delete </item>
+      <item> remove </item>
+      <item> destroy </item>
+      <item> cut </item>
+    </one-of>
+    <item repeat="0-1"> this </item>
+    <item repeat="0-1"> module </item>
+    <item repeat="0-1"> please </item>
+    <tag> out = "delete"; </tag>
+  </rule>
+
+  <rule id="Copy" scope="public">
+    <item repeat="0-1"> please </item>
+    <one-of>
+      <item> copy </item>
+      <item> clone </item>
+      <item> duplicate </item>
+    </one-of>
+    <item repeat="0-1"> this </item>
+    <item repeat="0-1"> module </item>
+    <item repeat="0-1"> please </item>
+    <tag> out = "copy"; </tag>
+  </rule>
+
+  <rule id="Move" scope="public">
+    <item repeat="0-1"> please </item>
+    <one-of>
+      <item> move </item>
+      <item> grab </item>
+      <item> take </item>
+      <item> shift </item>
+      <item> to here </item>
+    </one-of>
+    <item repeat="0-1"> this </item>
+    <item repeat="0-1"> module </item>
+    <item repeat="0-1"> please </item>
+    <tag> out = "move"; </tag>
+  </rule>
+
+  <rule id="Annotate" scope="public">
+    <item repeat="0-1"> please </item>
+    <one-of>
+      <item> make a note </item>
+      <item> annotate </item>
+    </one-of>
+    <item repeat="0-1"> please </item>
+    <tag> out = "annotate"; </tag>
   </rule>
 
 </grammar>

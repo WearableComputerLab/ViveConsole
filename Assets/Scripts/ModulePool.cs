@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ModulePool : MonoBehaviour
 {
+    public static ModulePool DefaultPool { get; private set; }
+    public static List<ModulePool> AllPools { get; }
+
     private class ObjectPool<T> where T : UnityEngine.Object
     {
         private T _prefab;
@@ -51,6 +54,9 @@ public class ModulePool : MonoBehaviour
         }
     }
 
+    [Tooltip("Make this the default pool")]
+    public bool isDefault;
+
     public List<ConsoleModule> _modulePrefabs = new List<ConsoleModule>();
 
     private readonly Dictionary<int, ObjectPool<ConsoleModule>> _objectPools = new Dictionary<int, ObjectPool<ConsoleModule>>();
@@ -61,6 +67,9 @@ public class ModulePool : MonoBehaviour
         {
             _objectPools.Add(m._id, new ObjectPool<ConsoleModule>(m, transform));
         }
+
+        if (DefaultPool == null || isDefault)
+            DefaultPool = this;
     }
 
     public ConsoleModule RequestModule(int id)

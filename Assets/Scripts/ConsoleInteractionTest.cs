@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class ConsoleInteractionTest : MonoBehaviour
 {
@@ -14,14 +11,42 @@ public class ConsoleInteractionTest : MonoBehaviour
     private Vector3 _localSelectionOffset;
     private ConsoleBase consoleBase;
 
-    public Canvas radialMenu;
-
     void Start()
     {
         attachedCamera = GetComponentInParent<Camera>();
         pencil = FindObjectOfType<Console_Pencil_Behaviour>();
         selectionManager = FindObjectOfType<ModuleSelectionManager>();
         consoleBase = FindObjectOfType<ConsoleBase>();
+
+        KeywordListener.keywordHeard.AddListener(HandleKeywordActions);
+    }
+
+    private void HandleKeywordActions(string keyword)
+    {
+        switch (keyword)
+        {
+            case "copy":
+                CloneSelectedModule();
+                break;
+            case "move":
+                EditSelectedModule();
+                break;
+            case "annotate":
+                AnnotateSelectedModule();
+                break;
+            case "delete":
+                DeleteSelectedModule();
+                break;
+            case "Test":
+                Debug.Log("Keyword detected - Test");
+                break;
+            case "Check":
+                Debug.Log("Keyword detected - Check");
+                break;
+            default:
+                Debug.Log("Unknown keyword detected");
+                break;
+        }
     }
 
     void Update()
@@ -32,8 +57,6 @@ public class ConsoleInteractionTest : MonoBehaviour
             UpdateSelection();
         else
             UpdateSelectedModule();
-
-        UpdateRadialMenu();
     }
 
     public void EditSelectedModule()
@@ -41,7 +64,16 @@ public class ConsoleInteractionTest : MonoBehaviour
         if (_selectedModule)
             DropSelectedModule(DRAG_HEIGHT);
         else
+        {
             _selectedModule = selectionManager.SelectedModule;
+            if (Physics.Raycast(GetScreenRay(), maxDistance: Mathf.Infinity, hitInfo: out RaycastHit modulePanelHit, layerMask: LayerMask.GetMask("Furniture")))
+            {
+                var colliderPlane = new Plane(modulePanelHit.normal, modulePanelHit.point);
+                _selectionOffset = colliderPlane.ClosestPointOnPlane(_selectedModule.transform.position) - modulePanelHit.point;
+                _localSelectionOffset = modulePanelHit.collider.transform.InverseTransformVector(_selectionOffset);
+                //_selectionOffset.z = 0;
+            }
+        }
     }
 
     public void AnnotateSelectedModule()
@@ -143,44 +175,4 @@ public class ConsoleInteractionTest : MonoBehaviour
 
     }
 
-            Vector2? startTouchPos;
-    void UpdateRadialMenu()
-    {
-        var showRadialMenu = Valve.VR.SteamVR_Actions.default_ShowRadialMenu.state && selectionManager.SelectedModule != null;
-        radialMenu.gameObject.SetActive(showRadialMenu);
-        if (showRadialMenu)
-        {
-            radialMenu.transform.parent.position = selectionManager.SelectedModule.transform.position;
-            radialMenu.transform.parent.LookAt(selectionManager.SelectedModule.transform.TransformPoint(Vector3.back));
-            //radialMenu.transform.
-            var touchPos = Valve.VR.SteamVR_Actions.default_RadialThumb.axis;
-            startTouchPos = Vector2.zero; // startTouchPos ?? touchPos;
-            var buttonList = radialMenu.GetComponentsInChildren<Button>();
-            const float deadzone = 0.2f;
-            switch (touchPos - startTouchPos.Value)
-            {
-                case var t when t.y > deadzone && Mathf.Abs(t.x) < t.y:
-                    buttonList[0].Select(); break;
-                case var t when t.x > deadzone && Mathf.Abs(t.y) < t.x:
-                    buttonList[1].Select(); break;
-                case var t when t.x < -deadzone && Mathf.Abs(t.y) < -t.x:
-                    buttonList[2].Select(); break;
-                case var t when t.y < -deadzone && Mathf.Abs(t.x) < -t.y:
-                    buttonList[3].Select(); break;
-                default:
-                    UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-                    break;
-            }
-
-            if (Valve.VR.SteamVR_Actions.default_ConfirmRadialMenu.stateDown)
-            {
-                UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject?.GetComponent<Button>().onClick.Invoke();
-            }
-        }
-        else
-        {
-            startTouchPos = null;
-            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-        }
-    }
 }

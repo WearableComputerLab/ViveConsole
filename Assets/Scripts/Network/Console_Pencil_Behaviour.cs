@@ -8,16 +8,9 @@ public class Console_Pencil_Behaviour : MonoBehaviour
     public enum Mode { Draw, Move, Rotate, Scale, Delete, Clone, Vertical, Horizontal, Copy, Paste, Cut }
     public Mode mode;
     private int currentMode = 1;
-    private float rayDist = 10;
+    private readonly float rayDist = 10;
     private float rotation;
     private bool drag = false;
-    private Ray ray;
-    private Ray downRay;
-    private Vector3 forwardDirection;
-    private Vector3 downDirection;
-    private Vector3 hitPos;
-    private Vector3 axisScale;
-    private Transform rayTransform;
     private Transform deleteObject;
     private Transform cone;
     private Transform console;
@@ -37,41 +30,137 @@ public class Console_Pencil_Behaviour : MonoBehaviour
     private Vector3 postVelocity;
     private Drawing_Pencil drawing_pencil;
     private ObjectScaler object_scaler;
-    public TextMesh textMesh;
     private GameObject rotationOffset;
 
+    public Transform contactPoint;
+    public float contactDist;
 
     // Use this for initialization
     private void Start()
     {
-        cone = transform.GetChild(0);
-        coneColor = cone.GetComponent<MeshRenderer>().material.color;
-        cursorColors = new Color[2];
-        drawing_pencil = GetComponentInChildren<Drawing_Pencil>();
         object_scaler = FindObjectOfType<ObjectScaler>();
+        axis = FindObjectOfType<Axis_Object>()?.GetComponentInChildren<MeshRenderer>();
+        if (axis)
+            axis.enabled = false;
+
+        cone = transform.GetChild(0);
+        coneColor = cone.GetComponentInChildren<MeshRenderer>().material.color;
+        drawing_pencil = GetComponentInChildren<Drawing_Pencil>();
         drawing_pencil.draw = false;
         pivotPoint = new GameObject("Pivot").GetComponent<Transform>();
         pivotPoint.gameObject.hideFlags = HideFlags.DontSave | HideFlags.NotEditable;
         rotationOffset = new GameObject("rotationOffset");
         cursor = transform.GetChild(2);
-        cursorMesh = cursor.GetComponent<MeshRenderer>();
-        axis = FindObjectOfType<Axis_Object>()?.GetComponent<MeshRenderer>();
-        if (axis) axis.enabled = false;
-        eraser = transform.GetChild(3).GetComponent<MeshRenderer>();
-        clone_tool = transform.GetChild(4).GetComponent<MeshRenderer>();
-        cursorColors[0] = cursorMesh.material.GetColor("_TintColor");
+        cursorMesh = cursor.GetComponentInChildren<MeshRenderer>();
+        eraser = transform.GetChild(3).GetComponentInChildren<MeshRenderer>();
+        clone_tool = transform.GetChild(4).GetComponentInChildren<MeshRenderer>();
+
+        cursorColors = new Color[2];
+        cursorColors[0] = cursorMesh.material.HasProperty("_TintColor") ? cursorMesh.material.GetColor("_TintColor") : Color.blue;
         cursorColors[1] = new Color32(208, 12, 12, 18);
     }
 
     private void Update()
     {
-
-
-        //Cursor.visible = false;
-        //pivotPoint.position = cursor.position;
-
         preVelocity = cursor.position;
 
+        Update_Move();
+        if (Input.GetMouseButtonDown(0))
+        {
+            cone.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
+        }
+        Update_Draw();
+        Update_Clone();
+        Update_Delete();
+        if (Input.GetMouseButtonUp(0))
+        {
+            cone.GetComponentInChildren<MeshRenderer>().material.color = coneColor;
+            drawing_pencil.draw = false;
+            if (mode == Mode.Scale)
+            {
+                object_scaler.ScaleObject = null;
+            }
+        }
+        if (dropTime > 0)
+        {
+            dropTime -= Time.deltaTime;
+        }
+        if (upTime > 0)
+        {
+            upTime -= Time.deltaTime;
+        }
+        SwitchMode();
+        MoveCursor();
+
+        Vector3 q = new Vector3(transform.eulerAngles.x + 180, transform.eulerAngles.y + 180, transform.eulerAngles.z);
+        rotationOffset.transform.eulerAngles = q;
+        rotation = rotationOffset.transform.eulerAngles.y + 180;
+        postVelocity = transform.position - preVelocity;
+    }
+
+    private void Update_Delete()
+    {
+        eraser.enabled = (mode == Mode.Delete);
+
+        if (mode == Mode.Delete &&
+            deleteObject != null)
+        {
+            if (deleteObject.localScale.x > 0.01f)
+            {
+                deleteObject.localScale -= new Vector3(0.3f, 0.3f, 0.3f) * Time.deltaTime;
+            }
+            else
+            {
+                Destroy(deleteObject.gameObject);
+                deleteObject = null;
+            }
+        }
+    }
+
+    private void Update_Clone()
+    {
+        clone_tool.enabled = (mode == Mode.Clone);
+    }
+
+    private void Update_Draw()
+    {
+        if (drawing_pencil == null)
+            return;
+
+        // TODO: Refactor this to remove the local function
+        // Local function for consise null check
+        void enablePencilMeshRenderer(bool isEnabled)
+        {
+            MeshRenderer pencilRenderer = drawing_pencil.GetComponentInChildren<MeshRenderer>();
+            if (pencilRenderer != null) { pencilRenderer.enabled = isEnabled; }
+        }
+
+        if (Input.GetMouseButton(0) && mode == Mode.Draw)
+        {
+            drawing_pencil.draw = true;
+        }
+        if (mode == Mode.Draw)
+        {
+            enablePencilMeshRenderer(true);
+            cone.GetComponentInChildren<MeshRenderer>().enabled = false;
+        }
+        else
+        {
+            enablePencilMeshRenderer(false);
+        }
+        if (mode == Mode.Move)
+        {
+            enablePencilMeshRenderer(false);
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            drawing_pencil.draw = false;
+        }
+
+    }
+
+    private void Update_Move()
+    {
         if (moveObject != null)
         {
             FollowNormal();
@@ -96,6 +185,8 @@ public class Console_Pencil_Behaviour : MonoBehaviour
         {
             pivotPoint.transform.position = transform.position;
         }
+
+        // Check for dropping object?
         if (Input.GetMouseButtonDown(0) && moveObject != null && dropTime <= 0.1f)
         {
             moveObject.gameObject.GetComponent<BoxCollider>().enabled = true;
@@ -103,87 +194,15 @@ public class Console_Pencil_Behaviour : MonoBehaviour
             moveObject = null;
             if (axis) axis.enabled = false;
         }
-        if (Input.GetMouseButtonDown(0))
-        {
-            cone.GetComponent<MeshRenderer>().material.color = Color.yellow;
-        }
-        if (Input.GetMouseButton(0) && mode == Mode.Draw)
-        {
-            drawing_pencil.draw = true;
-        }
-        if (mode == Mode.Draw)
-        {
-            drawing_pencil.GetComponent<MeshRenderer>().enabled = true;
-            cone.GetComponent<MeshRenderer>().enabled = false;
-        }
-        else
-        {
-            drawing_pencil.GetComponent<MeshRenderer>().enabled = false;
-        }
-        if (mode == Mode.Move)
-        {
-            drawing_pencil.GetComponent<MeshRenderer>().enabled = false;
-        }
-        if (mode == Mode.Clone)
-        {
-            clone_tool.enabled = true;
-        }
-        else
-        {
-            clone_tool.enabled = false;
-        }
-        if (mode == Mode.Delete)
-        {
-            eraser.enabled = true;
-            if (deleteObject != null)
-            {
-                if (deleteObject.localScale.x > 0.01f)
-                {
-                    deleteObject.localScale -= new Vector3(0.3f, 0.3f, 0.3f) * Time.deltaTime;
-                }
-                else
-                {
-                    Destroy(deleteObject.gameObject);
-                    deleteObject = null;
-                }
-            }
-        }
-        else
-        {
-            eraser.enabled = false;
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            cone.GetComponent<MeshRenderer>().material.color = coneColor;
-            drawing_pencil.draw = false;
-            if (mode == Mode.Scale)
-            {
-                object_scaler.ScaleObject = null;
-            }
-        }
-        if (dropTime > 0)
-        {
-            dropTime -= Time.deltaTime;
-        }
-        if (upTime > 0)
-        {
-            upTime -= Time.deltaTime;
-        }
-        SwitchMode();
-        MoveCursor();
 
-        Vector3 q = new Vector3(transform.eulerAngles.x + 180, transform.eulerAngles.y + 180, transform.eulerAngles.z);
-        rotationOffset.transform.eulerAngles = q;
-        rotation = rotationOffset.transform.eulerAngles.y + 180;
-        postVelocity = transform.position - preVelocity;
     }
 
     // As you move object it follows normals of mesh
     private void FollowNormal()
     {
-        forwardDirection = cone.TransformDirection(Vector3.forward);
+        var forwardDirection = cone.TransformDirection(Vector3.forward);
         Debug.DrawRay(cone.position, forwardDirection, Color.yellow, 0, true);
-        ray = new Ray(cone.position, forwardDirection);
+        var ray = new Ray(cone.position, forwardDirection);
         if (Physics.Raycast(ray, out RaycastHit hit, rayDist, LayerMask.GetMask("Default")) && drag == false && mode != Mode.Scale)
         {
             moveObject.localPosition = new Vector3(0, 0.05f, 0.05f);
@@ -231,15 +250,43 @@ public class Console_Pencil_Behaviour : MonoBehaviour
 
     private void MoveCursor()
     {
-        Vector3 f = cone.TransformDirection(Vector3.forward);
-        Debug.DrawRay(cone.position, f, Color.yellow, 0, true);
-        Ray r = new Ray(cone.position, f);
-        if (Physics.Raycast(r, out RaycastHit hit, rayDist, LayerMask.GetMask("Furniture")))
+        if (Physics.CheckSphere(contactPoint.position, contactDist, LayerMask.GetMask("Furniture")))
         {
+            var colliders = Physics.OverlapSphere(contactPoint.position, contactDist, LayerMask.GetMask("Furniture"));
+            cursor.position = colliders[0].ClosestPoint(contactPoint.position);
+
+            var annotationLayer = colliders[0].transform.GetComponentInParent<AnnotationLayer>();
+            var annotateTex = annotationLayer.GetComponentInChildren<AnnotateTexture>();
+            var annotateRay = new Ray(cursor.position - colliders[0].transform.forward, colliders[0].transform.forward);
+            Debug.DrawRay(annotateRay.origin, annotateRay.direction * 2 * contactDist, Color.red, 0);
+
             if (Input.GetMouseButton(1) || Valve.VR.SteamVR_Actions.default_InteractUI.state)
             {
-                var annotationLayer = hit.transform.GetComponentInParent<AnnotationLayer>();
-                var annotateTex = annotationLayer.GetComponentInChildren<AnnotateTexture>();
+
+                // update ray with annotateTexture
+                if (Input.GetMouseButtonDown(1) || Valve.VR.SteamVR_Actions.default_InteractUI.stateDown)
+                {
+                    // start a ray with the annotateTexture
+                    annotateTex.OnBeginRay(annotateRay);
+                }
+                else
+                    annotateTex.OnUpdateRay(annotateRay);
+            }
+            return;
+        }
+        Vector3 f = cone.TransformDirection(Vector3.forward).normalized;
+        Debug.DrawRay(cone.position, f * rayDist, Color.yellow, 0, true);
+        Ray r = new Ray(cone.position, f);
+        cursor.position = r.GetPoint(rayDist);
+        if (Physics.Raycast(r, out RaycastHit hit, rayDist, LayerMask.GetMask("Furniture")))
+        {
+            if ((Input.GetMouseButton(1) || Valve.VR.SteamVR_Actions.default_InteractUI.state) &&
+                Physics.Raycast(r, out RaycastHit annotateHit, rayDist, LayerMask.GetMask("Annotation")))
+            {
+                //var annotationLayer = hit.transform.GetComponentInParent<AnnotationLayer>();
+                //var annotateTex = annotationLayer.GetComponentInChildren<AnnotateTexture>();
+                var annotateTex = annotateHit.transform.GetComponent<AnnotateTexture>();
+             
                 // update ray with annotateTexture
                 if (Input.GetMouseButtonDown(1) || Valve.VR.SteamVR_Actions.default_InteractUI.stateDown)
                 {
@@ -253,7 +300,9 @@ public class Console_Pencil_Behaviour : MonoBehaviour
             cursor.position = hit.point + hit.normal * 0.01f; ;
             clone_tool.transform.position = hit.point;
             drawing_pencil.transform.position = hit.point + hit.normal * 0.01f;
-            cursor.rotation = Quaternion.FromToRotation(cursor.TransformDirection(Vector3.forward), hit.normal) * cursor.rotation;
+            cursor.rotation = Quaternion.FromToRotation(Vector3.forward, hit.normal);
+
+            #region UnusedCode
             if (hit.transform.tag == "Grabbable")
             {
                 if (axis)
@@ -310,7 +359,7 @@ public class Console_Pencil_Behaviour : MonoBehaviour
             {
                 drag = false;
                 console = hit.transform;
-                cone.GetComponent<MeshRenderer>().material.color = coneColor;
+                cone.GetComponentInChildren<MeshRenderer>().material.color = coneColor;
                 print("console was found");
             }
             if (Input.GetMouseButtonUp(0))
@@ -332,6 +381,7 @@ public class Console_Pencil_Behaviour : MonoBehaviour
                 }
 
             }
+            #endregion
         }
     }
 

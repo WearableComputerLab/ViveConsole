@@ -5,11 +5,9 @@ using UnityEngine;
 public class AnnotationLayer : MonoBehaviour
 {
     public Shader annotateShader;
+    private AnnotateTexture annotateTexture;
 
-    ModulePanel parentPanel;
-    AnnotateTexture annotateTexture;
-
-    public ModulePanel ParentPanel { get => parentPanel; set => parentPanel = value; }
+    public ModulePanel ParentPanel { get; set; }
 
     // Start is called before the first frame update
     void Start()
@@ -26,9 +24,18 @@ public class AnnotationLayer : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ClearAnnotation()
     {
-        
+        annotateTexture.ClearTexture();
+    }
+
+    public void ShowAnnotation()
+    {
+        annotateTexture.gameObject.SetActive(true);
+    }
+
+    public void HideAnnotation()
+    {
+        annotateTexture.gameObject.SetActive(false);
     }
 }

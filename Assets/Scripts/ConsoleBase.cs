@@ -4,6 +4,7 @@ using UnityEngine;
 using File = System.IO.File;
 using Path = System.IO.Path;
 using Encoding = System.Text.Encoding;
+using Random = UnityEngine.Random;
 
 public partial class ConsoleBase : MonoBehaviour
 {
@@ -12,15 +13,13 @@ public partial class ConsoleBase : MonoBehaviour
     public List<ConsoleModule> _currentModules;
     public List<ModulePanel> _modulePanels;
 
-    public ModulePool _modulePool;
-
     public ModuleLayout _savedLayout;
 
     public ConsoleModule AddModule(int moduleId, int panelId)
     {
-        var newModule = _modulePool?.RequestModule(moduleId);
+        var newModule = ModulePool.DefaultPool.RequestModule(moduleId);
         var panel = GetPanelWithId(panelId) ?? 
-            _modulePanels[UnityEngine.Random.Range(0, _modulePanels.Count)];
+            _modulePanels[Random.Range(0, _modulePanels.Count)];
 
         newModule.SetPanel(panel);
         newModule.transform.localEulerAngles = new Vector3(0, 180, 0);
@@ -81,7 +80,7 @@ public partial class ConsoleBase : MonoBehaviour
     internal void RemoveModule(ConsoleModule deleteTarget)
     {
         // TODO: clean up any references to this module before returning to pool
-        _modulePool.ReturnModule(deleteTarget);
+        ModulePool.DefaultPool.ReturnModule(deleteTarget);
     }
 
     public void SaveCurrentLayout()

@@ -120,7 +120,7 @@ namespace UnitySARCommon.Projector
 
         //-- OLD SARPROJECTOR VARIABLES -- END
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         /// <summary>
         /// Add the SARProjector option to the heirarchy menu.
         /// Right click and create a SARProjector game object.
@@ -131,15 +131,15 @@ namespace UnitySARCommon.Projector
             GameObject obj = new GameObject();
             obj.AddComponent<SARProjector>().name = "SARProjector";
         }
-        #endif
+#endif
 
         void Start()
         {
             UpdateCameraParameters();
         }
 
-        void Update()       { }
-        void OnValidate()   { }
+        void Update() { }
+        void OnValidate() { }
 
         public int DisplayID
         {
@@ -364,7 +364,7 @@ namespace UnitySARCommon.Projector
 
 
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [CustomEditor(typeof(SARProjector))]
         public class SARProjectorEditor : UnityEditor.Editor
         {
@@ -386,6 +386,16 @@ namespace UnitySARCommon.Projector
             SerializedProperty m_extAssestsFilePath;
             SerializedProperty m_extCustomFilePath;
 
+            SerializedObject serializedCameraObject;
+
+            public SerializedProperty cullingMask { get; private set; }
+            public SerializedProperty clearFlags { get; private set; }
+            public SerializedProperty background { get; private set; }
+            public SerializedProperty depth { get; private set; }
+            public SerializedProperty renderingPath { get; private set; }
+            public SerializedProperty targetTexture { get; private set; }
+            public SerializedProperty targetDisplay { get; private set; }
+
             // Camera Parameters
             private string[] cameraDisplayStrings = { "Display 1", "Display 2", "Display 3", "Display 4", "Display 5", "Display 6", "Display 7", "Display 8" };
             private int[] cameraDisplayValues = { 0, 1, 2, 3, 4, 5, 6, 7 };
@@ -394,6 +404,7 @@ namespace UnitySARCommon.Projector
             {
                 projectorScript = (SARProjector)target;
                 cameraScript = projectorScript.GetComponent<Camera>();
+                serializedCameraObject = new SerializedObject(cameraScript);
 
                 m_cameraSelection = this.serializedObject.FindProperty("cameraSelection");
 
@@ -410,13 +421,40 @@ namespace UnitySARCommon.Projector
                 m_extAbsoluteFilePath = this.serializedObject.FindProperty("extAbsoluteFilePath");
                 m_extAssestsFilePath = this.serializedObject.FindProperty("extAssetsFilePath");
                 m_extCustomFilePath = this.serializedObject.FindProperty("extCustomFilePath");
+
+                cullingMask = serializedCameraObject.FindProperty("m_CullingMask");
+                clearFlags = serializedCameraObject.FindProperty("m_ClearFlags");
+                background = serializedCameraObject.FindProperty("m_BackGroundColor");
+                depth = serializedCameraObject.FindProperty("m_Depth");
+                renderingPath = serializedCameraObject.FindProperty("m_RenderingPath");
+                targetTexture = serializedCameraObject.FindProperty("m_TargetTexture");
+                targetDisplay = serializedCameraObject.FindProperty("m_TargetDisplay");
+
             }
 
+            // Manually entered rendering path names/values, since we want to show them
+            // in different order than they appear in the enum.
+            private static readonly GUIContent[] kCameraRenderPaths =
+            {
+                EditorGUIUtility.TrTextContent("Use Graphics Settings"),
+                EditorGUIUtility.TrTextContent("Forward"),
+                EditorGUIUtility.TrTextContent("Deferred"),
+                EditorGUIUtility.TrTextContent("Legacy Vertex Lit"),
+                EditorGUIUtility.TrTextContent("Legacy Deferred (light prepass)")
+            };
+            private static readonly int[] kCameraRenderPathValues =
+            {
+                (int)RenderingPath.UsePlayerSettings,
+                (int)RenderingPath.Forward,
+                (int)RenderingPath.DeferredShading,
+                (int)RenderingPath.VertexLit,
+                (int)RenderingPath.DeferredLighting
+            };
             public override void OnInspectorGUI()
             {
                 serializedObject.Update();
+                serializedCameraObject.Update();
 
-               
                 if (cameraScript != null)
                 {
                     // If the projector script is enabled, disable the attached camera parameters
@@ -424,7 +462,7 @@ namespace UnitySARCommon.Projector
                     // If the projector script is disabled, hide all SARProjector information and update the Helpbox with relevant information
                     if (projectorScript.enabled)
                     {
-                        projectorScript.GetComponent<Camera>().hideFlags = HideFlags.NotEditable;
+                        projectorScript.GetComponent<Camera>().hideFlags = HideFlags.HideInInspector;
                         UnityEditorInternal.ComponentUtility.MoveComponentUp(projectorScript);
                         //UnityEditorInternal.InternalEditorUtility.SetIsInspectorExpanded(projectorScript.GetComponent<Camera>(), false);
 
@@ -527,8 +565,8 @@ namespace UnitySARCommon.Projector
                                 }
                                 else
                                 {
-                                   EditorGUILayout.HelpBox("No alternative cameras are available to select from inside the scene", MessageType.Error);
-                                }                               
+                                    EditorGUILayout.HelpBox("No alternative cameras are available to select from inside the scene", MessageType.Error);
+                                }
 
                                 break;
                             }
@@ -627,8 +665,9 @@ namespace UnitySARCommon.Projector
                         default:
                             break;
                     }
-                   
+
                     serializedObject.ApplyModifiedProperties();
+                    serializedCameraObject.ApplyModifiedProperties();
                 }
                 else  // cameraScript == null // this is bad!
                 {
@@ -660,7 +699,7 @@ namespace UnitySARCommon.Projector
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField(string.Format("{0} Matrix File Path", mString), GUILayout.MinWidth(100f));
                     EditorGUILayout.Space();
-                    
+
                     mFilePath = EditorGUILayout.TextField(mFilePath, GUILayout.MinWidth(250f));
                     EditorGUILayout.EndHorizontal();
 
@@ -688,7 +727,7 @@ namespace UnitySARCommon.Projector
                         {
                             case LoadFileFromSource.ProjectAssets:
                                 {
-                                    loadPath = Application.dataPath +"/"+ mFilePath;
+                                    loadPath = Application.dataPath + "/" + mFilePath;
                                     break;
                                 }
                             case LoadFileFromSource.ProjectorManagerCustom:
@@ -1003,51 +1042,58 @@ namespace UnitySARCommon.Projector
             /// </summary>
             void SetCameraParameters()
             {
+                cameraScript.hideFlags = HideFlags.None;
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Override Attached Camera Component Properties", EditorStyles.boldLabel, GUILayout.MinWidth(100f));
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Clear Flags", GUILayout.MinWidth(100f));
-                cameraScript.clearFlags = (CameraClearFlags)EditorGUILayout.EnumPopup(cameraScript.clearFlags, GUILayout.MinWidth(250f));
-                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.PropertyField(clearFlags, Styles.clearFlags);
+                EditorGUILayout.PropertyField(background, Styles.background);
+                EditorGUILayout.PropertyField(cullingMask);
+                EditorGUILayout.PropertyField(depth);
+                EditorGUILayout.PropertyField(renderingPath, Styles.renderingPath);
+                EditorGUILayout.PropertyField(targetTexture);
+                EditorGUILayout.IntPopup(targetDisplay, DisplayUtility.GetDisplayNames(), DisplayUtility.GetDisplayIndices(), EditorGUIUtility.TrTempContent("Target Display"));
+                cameraScript.hideFlags = HideFlags.NotEditable;
+            }
 
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Background", GUILayout.MinWidth(100f));
-                cameraScript.backgroundColor = EditorGUILayout.ColorField(cameraScript.backgroundColor, GUILayout.MinWidth(250f));
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Culling Mask", GUILayout.MinWidth(100f));
-                cameraScript.cullingMask = EditorGUILayout.MaskField(cameraScript.cullingMask, UnityEditorInternal.InternalEditorUtility.layers, GUILayout.MinWidth(250f));
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.Space();
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Depth", GUILayout.MinWidth(100f));
-                cameraScript.depth = EditorGUILayout.FloatField(cameraScript.depth, GUILayout.MinWidth(250f));
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Rendering Path", GUILayout.MinWidth(100f));
-                cameraScript.renderingPath = (RenderingPath)EditorGUILayout.EnumPopup(cameraScript.renderingPath, GUILayout.MinWidth(250f));
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Target Texture", GUILayout.MinWidth(100f));
-                cameraScript.targetTexture = (RenderTexture)EditorGUILayout.ObjectField(cameraScript.targetTexture, typeof(RenderTexture), true, GUILayout.MinWidth(250f));
-                EditorGUILayout.EndHorizontal();
-
-                EditorGUILayout.Space();
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Target Display", GUILayout.MinWidth(100f));
-                cameraScript.targetDisplay = EditorGUILayout.IntPopup(cameraScript.targetDisplay, cameraDisplayStrings, cameraDisplayValues, GUILayout.MinWidth(250f));
-                // = target + 1;
-                EditorGUILayout.EndHorizontal();
+            private static class Styles
+            {
+                public static GUIContent iconRemove = EditorGUIUtility.TrIconContent("Toolbar Minus", "Remove command buffer");
+                public static GUIContent clearFlags = EditorGUIUtility.TrTextContent("Clear Flags", "What to display in empty areas of this Camera's view.\n\nChoose Skybox to display a skybox in empty areas, defaulting to a background color if no skybox is found.\n\nChoose Solid Color to display a background color in empty areas.\n\nChoose Depth Only to display nothing in empty areas.\n\nChoose Don't Clear to display whatever was displayed in the previous frame in empty areas.");
+                public static GUIContent background = EditorGUIUtility.TrTextContent("Background", "The Camera clears the screen to this color before rendering.");
+                public static GUIContent renderingPath = EditorGUIUtility.TrTextContent("Rendering Path", "Choose a rendering method for this camera.\n\nUse Graphics Settings to use the rendering path specified in Player settings.\n\nUse Forward to render all objects with one pass per material.\n\nUse Deferred to draw all objects once without lighting and then draw the lighting of all objects at the end of the render queue.\n\nUse Legacy Vertex Lit to to render all lights in a single pass, calculated in vertices.\n\nLegacy Deferred has been deprecated.");
             }
         }
-        #endif
+
+        internal class DisplayUtility
+        {
+            static readonly string s_DisplayStr = "Display {0}";
+            private static readonly GUIContent[] s_GenericDisplayNames =
+            {
+                EditorGUIUtility.TrTextContent(string.Format(s_DisplayStr, 1)), EditorGUIUtility.TrTextContent(string.Format(s_DisplayStr, 2)),
+                EditorGUIUtility.TrTextContent(string.Format(s_DisplayStr, 3)), EditorGUIUtility.TrTextContent(string.Format(s_DisplayStr, 4)),
+                EditorGUIUtility.TrTextContent(string.Format(s_DisplayStr, 5)), EditorGUIUtility.TrTextContent(string.Format(s_DisplayStr, 6)),
+                EditorGUIUtility.TrTextContent(string.Format(s_DisplayStr, 7)), EditorGUIUtility.TrTextContent(string.Format(s_DisplayStr, 8))
+            };
+
+            private static readonly int[] s_DisplayIndices = { 0, 1, 2, 3, 4, 5, 6, 7 };
+
+            public static GUIContent[] GetGenericDisplayNames()
+            {
+                return s_GenericDisplayNames;
+            }
+
+            public static int[] GetDisplayIndices()
+            {
+                return s_DisplayIndices;
+            }
+
+            public static GUIContent[] GetDisplayNames()
+            {
+                return s_GenericDisplayNames;
+            }
+        }
+#endif
     }
 }

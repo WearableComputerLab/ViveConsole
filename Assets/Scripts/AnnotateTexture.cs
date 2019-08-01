@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class AnnotateTexture : MonoBehaviour//, IDragHandler, IBeginDragHandler
 {
+    private static AnnotateTexture lastTextureUsed;
     MeshRenderer canvas;
     RenderTexture canvasTexture;
     Vector3 prevWorldPos;
@@ -57,7 +58,7 @@ public class AnnotateTexture : MonoBehaviour//, IDragHandler, IBeginDragHandler
 
     public void OnBeginRay(Ray ray)
     {
-        Physics.Raycast(ray, out RaycastHit hitInfo);
+        GetComponent<MeshCollider>().Raycast(ray, out RaycastHit hitInfo, float.PositiveInfinity);
         prevWorldPos = new Vector3(hitInfo.textureCoord.x * 1000 - 500, hitInfo.textureCoord.y * 1000 - 500);
         Color.RGBToHSV(lastColor, out float hue, out float sat, out float val);
         lastColor = Color.HSVToRGB(hue + 0.01f, sat, val);
@@ -65,10 +66,15 @@ public class AnnotateTexture : MonoBehaviour//, IDragHandler, IBeginDragHandler
 
     public void OnUpdateRay(Ray ray)
     {
+        if (lastTextureUsed != this)
+        {
+            OnBeginRay(ray);
+            lastTextureUsed = this;
+        }
         //var localPos = transform.InverseTransformPoint(eventData.pointerCurrentRaycast.worldPosition);
         var lastLocalPos = prevWorldPos; // transform.InverseTransformPoint(prevWorldPos);
 
-        GetComponent<MeshCollider>().Raycast(ray, out RaycastHit hitInfo, float.PositiveInfinity);
+        var didHit = GetComponent<MeshCollider>().Raycast(ray, out RaycastHit hitInfo, float.PositiveInfinity);
         var localPos = new Vector3(hitInfo.textureCoord.x * 1000 - 500, hitInfo.textureCoord.y * 1000 - 500);
         var prevRT = RenderTexture.active;
         RenderTexture.active = canvasTexture;
@@ -117,6 +123,7 @@ public class AnnotateTexture : MonoBehaviour//, IDragHandler, IBeginDragHandler
     // Start is called before the first frame update
     void Start()
     {
+        gameObject.layer = LayerMask.NameToLayer("Annotation");
     }
 
     public void ClearTexture()

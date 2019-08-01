@@ -12,6 +12,10 @@ public class KeywordListener : MonoBehaviour
     public ConfidenceLevel confidence;
     public bool initialiseRecognizers;
 
+    public class KeywordDetectedEvent : UnityEngine.Events.UnityEvent<string> { };
+
+    public static KeywordDetectedEvent keywordHeard = new KeywordDetectedEvent();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +63,11 @@ public class KeywordListener : MonoBehaviour
     private void OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
         Debug.Log($"Keyword \"{args.text}\" detected\n[Confidence={args.confidence}]");
+
+        if (args.semanticMeanings != null)
+            keywordHeard?.Invoke(args.semanticMeanings[0].values[0]);
+        else
+            keywordHeard?.Invoke(args.text);
     }
 
     private void OnDestroy()
@@ -69,7 +78,8 @@ public class KeywordListener : MonoBehaviour
 
     private string GenerateGrammarFile()
     {
-        var path = System.IO.Path.Combine(Application.streamingAssetsPath, "solitaireGrammar.xml");
+        var path = System.IO.Path.Combine(Application.streamingAssetsPath, "myGrammar.xml");
+        //var path = System.IO.Path.Combine(Application.streamingAssetsPath, "solitaireGrammar.xml");
 
         //        var rawText = @"<?xml version=""1.0"" encoding=""UTF-8"" ?>
         //<grammar version=""1.0"" xml:lang=""en-US"" mode=""voice"" root=""toplevel""
