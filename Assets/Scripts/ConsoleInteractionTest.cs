@@ -83,6 +83,9 @@ public class ConsoleInteractionTest : MonoBehaviour
 
     public void DeleteSelectedModule()
     {
+        if (_selectedModule)
+            DropSelectedModule(DRAG_HEIGHT);
+
         var deleteTarget = selectionManager.SelectedModule;
         selectionManager.SelectedModule = null;
         consoleBase.RemoveModule(deleteTarget);
@@ -90,6 +93,9 @@ public class ConsoleInteractionTest : MonoBehaviour
 
     public void CloneSelectedModule()
     {
+        if (_selectedModule)
+            DropSelectedModule(DRAG_HEIGHT);
+
         var cloneSource = selectionManager.SelectedModule;
         _selectedModule = consoleBase.AddModule(cloneSource._id, cloneSource._panel?._id ?? 0);
         selectionManager.SelectedModule = _selectedModule;
