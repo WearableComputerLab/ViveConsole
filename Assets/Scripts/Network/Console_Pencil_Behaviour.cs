@@ -44,7 +44,7 @@ public class Console_Pencil_Behaviour : MonoBehaviour
             axis.enabled = false;
 
         cone = transform.GetChild(0);
-        coneColor = cone.GetComponentInChildren<MeshRenderer>().material.color;
+        coneColor = cone.GetComponentInChildren<MeshRenderer>()?.material.color ?? Color.black;
         drawing_pencil = GetComponentInChildren<Drawing_Pencil>();
         drawing_pencil.draw = false;
         pivotPoint = new GameObject("Pivot").GetComponent<Transform>();
@@ -67,14 +67,14 @@ public class Console_Pencil_Behaviour : MonoBehaviour
         Update_Move();
         if (Input.GetMouseButtonDown(0))
         {
-            cone.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
+            //cone.GetComponentInChildren<MeshRenderer>().material.color = Color.yellow;
         }
         Update_Draw();
         Update_Clone();
         Update_Delete();
         if (Input.GetMouseButtonUp(0))
         {
-            cone.GetComponentInChildren<MeshRenderer>().material.color = coneColor;
+            //cone.GetComponentInChildren<MeshRenderer>().material.color = coneColor;
             drawing_pencil.draw = false;
             if (mode == Mode.Scale)
             {
@@ -100,7 +100,7 @@ public class Console_Pencil_Behaviour : MonoBehaviour
 
     private void Update_Delete()
     {
-        eraser.enabled = (mode == Mode.Delete);
+        if (eraser != null) eraser.enabled = (mode == Mode.Delete);
 
         if (mode == Mode.Delete &&
             deleteObject != null)
@@ -119,7 +119,7 @@ public class Console_Pencil_Behaviour : MonoBehaviour
 
     private void Update_Clone()
     {
-        clone_tool.enabled = (mode == Mode.Clone);
+        if (clone_tool != null) clone_tool.enabled = (mode == Mode.Clone);
     }
 
     private void Update_Draw()

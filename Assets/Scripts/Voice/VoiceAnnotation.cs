@@ -1,20 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Speech.Recognition;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
 
 public class VoiceAnnotation : MonoBehaviour
 {
-    [Header("UI Elements")]
-    public TMPro.TextMeshProUGUI statusText;
-    public TMPro.TextMeshProUGUI hypothesisText;
-    public TMPro.TextMeshProUGUI resultText;
+    //[Header("UI Elements")]
+    //public TMPro.TextMeshProUGUI statusText;
+    //public TMPro.TextMeshProUGUI hypothesisText;
+    //public TMPro.TextMeshProUGUI resultText;
 
     [Header("Configuration Options")]
     public ConfidenceLevel confidenceThreshold;
 
     DictationRecognizer dictationRecognizer;
+    SpeechRecognizer recognizer;
     VoiceRecorder recorder;
     bool dictationStarted;
     List<DictationResult> transcription;
@@ -47,7 +49,7 @@ public class VoiceAnnotation : MonoBehaviour
     {
         if (dictationStarted)
         {
-            statusText.SetText(dictationRecognizer.Status.ToString());
+            //statusText.SetText(dictationRecognizer.Status.ToString());
         }
     }
 
@@ -88,30 +90,45 @@ public class VoiceAnnotation : MonoBehaviour
         dictationRecognizer.DictationResult += DictationRecognizer_DictationResult;
 
         transcription = new List<DictationResult>();
+
+        recognizer = new SpeechRecognizer();
+        recognizer.AudioStateChanged += Recognizer_AudioStateChanged;
+    }
+
+    private void Recognizer_AudioStateChanged(object sender, AudioStateChangedEventArgs e)
+    {
+        Debug.Log($"Audio State changed {e.AudioState.ToString()}");
     }
 
     private void DictationRecognizer_DictationResult(string text, ConfidenceLevel confidence)
     {
         transcription.Add(new DictationResult(text, confidence));
-        resultText.SetText($"{text} [confidence={confidence}]");
-        statusText.SetText(dictationRecognizer.Status.ToString());
+        //resultText.SetText($"{text} [confidence={confidence}]");
+        //statusText.SetText(dictationRecognizer.Status.ToString());
         dictationStarted = dictationRecognizer.Status == SpeechSystemStatus.Running;
     }
 
     private void DictationRecognizer_DictationHypothesis(string text)
     {
-        hypothesisText.SetText(text);
+        //hypothesisText.SetText(text);
     }
 
     private void DictationRecognizer_DictationError(string error, int hresult)
     {
         dictationStarted = false;
-        statusText.SetText($"Error ({hresult}): {error}");
+        Debug.Log($"DictationRecognizer Error (0x{hresult:x}): {error}");
+        //statusText.SetText($"Error ({hresult}): {error}");
     }
 
     private void DictationRecognizer_DictationComplete(DictationCompletionCause cause)
     {
         Debug.Log($"Dictation complete: {cause.ToString()}");
+        string transcriptionResult = string.Empty;
+        foreach (var tr in transcription)
+        {
+            transcriptionResult += tr.text + " ";
+        }
+        Debug.Log($"<color=red>Transcription result:</color>\n{transcriptionResult}");
         dictationStarted = false;
     }
 }
