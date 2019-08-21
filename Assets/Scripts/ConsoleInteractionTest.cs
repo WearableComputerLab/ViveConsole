@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class ConsoleInteractionTest : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class ConsoleInteractionTest : MonoBehaviour
     private Vector3 _selectionOffset;
     private Vector3 _localSelectionOffset;
     private ConsoleBase consoleBase;
+
+    private Vector3 previousModulePosition;
+    private ModulePanel previousModulePanel;
 
     void Start()
     {
@@ -37,6 +41,22 @@ public class ConsoleInteractionTest : MonoBehaviour
             case "delete":
                 DeleteSelectedModule();
                 break;
+
+            case "rotate":
+                RotateSelectedModule(); break;
+            case "scale":
+                ScaleSelectedModule(); break;
+            case "done":
+                FinishCurrentAction(); break;
+            case "cancel":
+                CancelCurrentAction(); break;
+            case "undo":
+                UndoLastAction(); break;
+            case "save":
+                SaveConfiguration(); break;
+            case "load":
+                LoadConfiguration(); break;
+
             case "Test":
                 Debug.Log("Keyword detected - Test");
                 break;
@@ -47,6 +67,50 @@ public class ConsoleInteractionTest : MonoBehaviour
                 Debug.Log("Unknown keyword detected");
                 break;
         }
+    }
+
+    private void LoadConfiguration()
+    {
+        consoleBase.LoadLayoutFrom();
+    }
+
+    private void SaveConfiguration()
+    {
+        consoleBase.SaveCurrentLayout();
+    }
+
+    private void UndoLastAction()
+    {
+        // TODO: Implement an actual undo system for modifications
+        throw new NotImplementedException();
+    }
+
+    private void CancelCurrentAction()
+    {
+        if (_selectedModule)
+        {
+            var mod = _selectedModule;
+            DropSelectedModule(DRAG_HEIGHT);
+            mod.SetPanel(previousModulePanel);
+            mod.transform.localPosition = previousModulePosition;
+        }
+    }
+
+    private void FinishCurrentAction()
+    {
+        if (_selectedModule)
+            DropSelectedModule(DRAG_HEIGHT);
+    }
+
+    private void ScaleSelectedModule()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void RotateSelectedModule()
+    {
+        var moduleToRotate = _selectedModule ?? selectionManager.SelectedModule;
+        moduleToRotate.transform.Rotate(Vector3.forward, 15, Space.Self);
     }
 
     void Update()
@@ -66,6 +130,8 @@ public class ConsoleInteractionTest : MonoBehaviour
         else
         {
             _selectedModule = selectionManager.SelectedModule;
+            previousModulePosition = _selectedModule.transform.localPosition;
+            previousModulePanel = _selectedModule._panel;
             if (Physics.Raycast(GetScreenRay(), maxDistance: Mathf.Infinity, hitInfo: out RaycastHit modulePanelHit, layerMask: LayerMask.GetMask("Furniture")))
             {
                 var colliderPlane = new Plane(modulePanelHit.normal, modulePanelHit.point);

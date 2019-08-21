@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Speech.Recognition;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
@@ -16,9 +15,9 @@ public class VoiceAnnotation : MonoBehaviour
     public ConfidenceLevel confidenceThreshold;
 
     DictationRecognizer dictationRecognizer;
-    SpeechRecognizer recognizer;
     VoiceRecorder recorder;
     bool dictationStarted;
+    bool waitingForRecognizer;
     List<DictationResult> transcription;
 
     KeywordListener keywordListener;
@@ -42,6 +41,19 @@ public class VoiceAnnotation : MonoBehaviour
         InitialiseVoiceRecognition();
         recorder = GetComponent<VoiceRecorder>() ?? gameObject.AddComponent<VoiceRecorder>();
         keywordListener = FindObjectOfType<KeywordListener>();
+        KeywordListener.keywordHeard.AddListener(HandleKeywordActions);
+    }
+
+    private void HandleKeywordActions(string keyword)
+    {
+        switch (keyword)
+        {
+            case "annotate":
+                ToggleDictationPressed(true);
+                break;
+            default:
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -53,6 +65,13 @@ public class VoiceAnnotation : MonoBehaviour
         }
     }
 
+    private void OnGUI()
+    {
+        var spinnerCharacters = @"\|/-";
+        var spinnerFrame = spinnerCharacters[Time.frameCount % spinnerCharacters.Length];
+        GUILayout.Label(waitingForRecognizer ? $"Processing {spinnerFrame}" : dictationStarted ? "Listening ..." : "Dictation disabled");
+    }
+
     public async void ToggleDictationPressed(bool dictationEnabled)
     {
         await ToggleDictationPressedAsync(dictationEnabled);
@@ -60,13 +79,18 @@ public class VoiceAnnotation : MonoBehaviour
 
     async Task ToggleDictationPressedAsync(bool enableDictation)
     {
-        dictationStarted = enableDictation;
-        if (dictationStarted)
+        if (dictationStarted == enableDictation)
+            return;
+
+        waitingForRecognizer = true;
+
+        if (enableDictation)
         {
             keywordListener?.StopListening();
             await Task.Delay(100); // wait for phraserecognitionsystem to turn off
             dictationRecognizer.Start();
             recorder.StartRecording();
+            dictationStarted = true;
         }
         else
         {
@@ -77,7 +101,10 @@ public class VoiceAnnotation : MonoBehaviour
             recorder.SaveRecording();
 
             keywordListener?.StartListening();
+            dictationStarted = false;
         }
+
+        waitingForRecognizer = false;
     }
 
     void InitialiseVoiceRecognition()
@@ -90,22 +117,22 @@ public class VoiceAnnotation : MonoBehaviour
         dictationRecognizer.DictationResult += DictationRecognizer_DictationResult;
 
         transcription = new List<DictationResult>();
-
-        recognizer = new SpeechRecognizer();
-        recognizer.AudioStateChanged += Recognizer_AudioStateChanged;
-    }
-
-    private void Recognizer_AudioStateChanged(object sender, AudioStateChangedEventArgs e)
-    {
-        Debug.Log($"Audio State changed {e.AudioState.ToString()}");
     }
 
     private void DictationRecognizer_DictationResult(string text, ConfidenceLevel confidence)
     {
         transcription.Add(new DictationResult(text, confidence));
+        Debug.Log($"{text} [confidence={confidence}]");
         //resultText.SetText($"{text} [confidence={confidence}]");
         //statusText.SetText(dictationRecognizer.Status.ToString());
         dictationStarted = dictationRecognizer.Status == SpeechSystemStatus.Running;
+
+        // TODO: Search for command to end dictation in text
+        // TODO: Change this to OrdinalIgnoreCase string comparison?
+        if (text.Contains("stop dictation"))
+        {
+            ToggleDictationPressed(false);
+        }
     }
 
     private void DictationRecognizer_DictationHypothesis(string text)

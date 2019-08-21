@@ -20,21 +20,21 @@ public class VoiceRecorder : MonoBehaviour
         }
 
         bufferLength = 5;
-        sampleFrequency = 44100;
+        sampleFrequency = 48000;
 
         lastPosition = 0;
     }
 
     public void StartRecording()
     {
-        recording = Microphone.Start(null, true, bufferLength, sampleFrequency);
+        recording = Microphone.Start("Microphone (Realtek(R) Audio)", true, bufferLength, sampleFrequency);
         StartCoroutine(RetainAudioDataAsync());
     }
 
     public void StopRecording()
     {
         Debug.Log("Stop Recording called");
-        Microphone.End(null);
+        Microphone.End("Microphone (Realtek(R) Audio)");
     }
 
     public void SaveRecording()
@@ -46,7 +46,7 @@ public class VoiceRecorder : MonoBehaviour
     private void RetainAudioData(System.IO.BinaryWriter writer)
     {
         // move data from circular audio buffer into list of buffers
-        var recordingPosition = Microphone.GetPosition(null);
+        var recordingPosition = Microphone.GetPosition("Microphone (Realtek(R) Audio)");
         var samples = lastPosition <= recordingPosition ? recordingPosition - lastPosition : recordingPosition + (recording.samples - lastPosition);
         if (samples == 0) return;
 

@@ -17,8 +17,40 @@
         <tag> out.Command = rules.Move; </tag>
       </item>
       <item>
+        <ruleref uri="#Rotate"/>
+        <tag> out.Command = rules.Rotate; out.Angle = rules.Angle; </tag>
+      </item>
+      <item>
+        <ruleref uri="#Scale"/>
+        <tag> out.Command = rules.Scale; </tag>
+      </item>
+      <item>
         <ruleref uri="#Annotate"/>
         <tag> out.Command = rules.Annotate; </tag>
+      </item>
+      <item>
+        <ruleref uri="#Save"/>
+        <tag> out.Command = rules.Save; 
+              out.SlotNumber = rules.Config;
+        </tag>
+      </item>
+      <item>
+        <ruleref uri="#Load"/>
+        <tag> out.Command = rules.Load;
+              out.SlotNumber = rules.Config;
+        </tag>
+      </item>
+      <item>
+        <ruleref uri="#Done"/>
+        <tag> out.Command = rules.Done; </tag>
+      </item>
+      <item>
+        <ruleref uri="#Cancel"/>
+        <tag> out.Command = rules.Cancel; </tag>
+      </item>
+      <item>
+        <ruleref uri="#Undo"/>
+        <tag> out.Command = rules.Undo; </tag>
       </item>
     </one-of>
   </rule>
@@ -63,6 +95,138 @@
     <item repeat="0-1"> module </item>
     <item repeat="0-1"> please </item>
     <tag> out = "move"; </tag>
+  </rule>
+
+  <rule id="Scale" scope="public">
+    <item repeat="0-1"> please </item>
+    <one-of>
+      <item> scale </item>
+      <item> resize </item>
+    </one-of>
+    <item repeat="0-1"> this </item>
+    <item repeat="0-1"> module </item>
+    <item repeat="0-1"> please </item>
+    <tag> out = "scale"; </tag>
+  </rule>
+
+  <rule id="Rotate" scope="public">
+    <item repeat="0-1"> please </item>
+    <one-of>
+      <item> rotate </item>
+      <item> turn </item>
+      <item> spin </item>
+    </one-of>
+    <item repeat="0-1"> this </item>
+    <item repeat="0-1"> module </item>
+    <item repeat="0-1">
+      <item repeat="0-1"> by </item>
+      <ruleref uri="#Angle"/>
+    </item>
+    <item repeat="0-1"> please </item>
+    <tag> out = "rotate"; </tag>
+  </rule>
+
+
+  <rule id="Done" scope="public">
+    <one-of>
+      <item> place </item>
+      <item> drop </item>
+      <item> done </item>
+      <item> here </item>
+      <item> to here </item>
+    </one-of>
+    <item repeat="0-1"> this </item>
+    <item repeat="0-1"> please </item>
+    <tag> out = "done"; </tag>
+  </rule>
+
+  <rule id="Cancel" scope="public">
+    <one-of>
+      <item> cancel </item>
+      <item> stop </item>
+      <item> escape </item>
+    </one-of>
+    <item repeat="0-1"> that </item>
+    <item repeat="0-1"> please </item>
+    <tag> out = "cancel"; </tag>
+  </rule>
+  <rule id="Save" scope="public">
+    <one-of>
+      <item> save </item>
+      <item> store </item>
+    </one-of>
+    <item repeat="0-1">
+      <one-of>
+        <item> this </item>
+        <item> that </item>
+      </one-of>
+    </item>
+    <item> to </item>
+    <ruleref uri="#Config"/>
+    <item repeat="0-1"> please </item>
+    <tag> out = "save"; </tag>
+  </rule>
+
+  <rule id="Load" scope="public">
+    <one-of>
+      <item> load </item>
+      <item> restore </item>
+      <item> show me </item>
+    </one-of>
+    <tag> out = "load"; </tag>
+    <item>
+      <ruleref uri="#Config"/>
+    </item>
+    <item repeat="0-1"> please </item>
+    <tag> out.Slot = rules.Config; </tag>
+  </rule>
+
+  <rule id="Config" scope="public">
+    <one-of>
+      <item> item </item>
+      <item> layout </item>
+      <item> configuration </item>
+    </one-of>
+    <one-of>
+      <item> one
+        <tag> out = 1;</tag>
+      </item>
+      <item> two
+        <tag> out = 2;</tag>
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="Angle" scope="public">
+    <one-of>
+      <item> ten <tag> out = 10; </tag>
+      </item>
+      <item> thirty <tag> out = 30; </tag>
+      </item>
+      <item> forty five <tag> out = 45; </tag>
+      </item>
+      <item> sixty <tag> out = 60; </tag>
+      </item>
+      <item> ninety <tag> out = 90; </tag>
+      </item>
+      <item> one <item repeat="0-1"> hundred and </item> eighty <tag> out = 180; </tag>
+      </item>
+    </one-of>
+    <item repeat="0-1">
+      <one-of>
+        <item>degree</item>
+        <item>degrees</item>
+      </one-of>
+    </item>
+  </rule>
+
+  <rule id="Undo" scope="public">
+    <one-of>
+      <item> undo </item>
+      <item> back </item>
+      <item> whoops </item>
+    </one-of>
+    <tag> out = "undo"; </tag>
   </rule>
 
   <rule id="Annotate" scope="public">

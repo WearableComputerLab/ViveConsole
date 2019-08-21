@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Windows.Speech;
+using System.Linq;
 
 public class KeywordListener : MonoBehaviour
 {
@@ -63,9 +64,19 @@ public class KeywordListener : MonoBehaviour
     private void OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
         Debug.Log($"Keyword \"{args.text}\" detected\n[Confidence={args.confidence}]");
-
         if (args.semanticMeanings != null)
-            keywordHeard?.Invoke(args.semanticMeanings[0].values[0]);
+        {
+            var semantics = "";
+            foreach (var sm in args.semanticMeanings)
+            {
+                semantics += sm.key;
+                foreach (var v in sm.values)
+                    semantics += ":" + v;
+                semantics += " || ";
+            }
+            Debug.Log(semantics);
+            keywordHeard?.Invoke(args.semanticMeanings.Where(m => m.key == "Command").First().values[0]);
+        }
         else
             keywordHeard?.Invoke(args.text);
     }
