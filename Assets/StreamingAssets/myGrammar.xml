@@ -89,7 +89,6 @@
       <item> grab </item>
       <item> take </item>
       <item> shift </item>
-      <item> to here </item>
     </one-of>
     <item repeat="0-1"> this </item>
     <item repeat="0-1"> module </item>

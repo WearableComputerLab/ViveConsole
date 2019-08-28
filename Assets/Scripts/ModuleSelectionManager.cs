@@ -37,7 +37,7 @@ public class ModuleSelectionManager : MonoBehaviour
     }
     private void HighlightSelected()
     {
-        highlight = highlight ?? new GameObject("Highlight", typeof(MeshRenderer), typeof(MeshFilter));
+        highlight = highlight != null ? highlight : new GameObject("Highlight", typeof(MeshRenderer), typeof(MeshFilter));
         if (selectedModule == null)
         {
             highlight.SetActive(false);

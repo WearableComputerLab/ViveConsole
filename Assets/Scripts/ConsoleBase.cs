@@ -80,6 +80,7 @@ public partial class ConsoleBase : MonoBehaviour
     internal void RemoveModule(ConsoleModule deleteTarget)
     {
         // TODO: clean up any references to this module before returning to pool
+        _currentModules.Remove(deleteTarget);
         ModulePool.DefaultPool.ReturnModule(deleteTarget);
     }
 

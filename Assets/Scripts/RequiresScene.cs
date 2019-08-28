@@ -16,8 +16,18 @@ public class RequiresScene : MonoBehaviour
     {
 #if UNITY_EDITOR
         EditorSceneManager.sceneOpened += EditorSceneManager_sceneOpened;
-#endif
+#else
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+#endif
+    }
+
+    private void OnDisable()
+    {
+#if UNITY_EDITOR
+        EditorSceneManager.sceneOpened -= EditorSceneManager_sceneOpened;
+#else
+        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+#endif
     }
 
     private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
@@ -53,14 +63,5 @@ public class RequiresScene : MonoBehaviour
         }
     }
 #endif
-
-    private void OnDisable()
-    {
-#if UNITY_EDITOR
-        EditorSceneManager.sceneOpened -= EditorSceneManager_sceneOpened;
-#endif
-        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
-    }
-
 
 }
